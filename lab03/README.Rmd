@@ -121,7 +121,7 @@ met[elev==max(elev,na.rm=TRUE), .(
 
 ### 7. Exploratory graphs
 
-We should look at the distributions of all of the key variables to make sure there are no remaining issues with the data.
+We should look at the distributions of all of the key variables to make sure there are no remaining issues with the data. 
 
 ```{r}
 hist(met$elev, breaks=100)
