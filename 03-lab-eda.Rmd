@@ -1,0 +1,82 @@
+---
+title: "03-lab-EDA"
+author: "ks"
+date: "9/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Lab week 3
+
+
+```{r install-libraries}
+if (!require(data.table)) {install.packages("data.table")}
+library(data.table)
+```
+
+### 1. Read in the data
+
+First read the data into a data.table.
+
+```{r readdata}
+if (!file.exists("data/met_all.gz")) {
+download.file("https://raw.githubusercontent.com/USCbiostats/data-science-data/master/02_met/met_all.gz", "data/met_all.gz", method="libcurl", timeout = 60)
+}
+met <- data.table::fread("data/met_all.gz")
+```
+
+### 2. Check the dimensions, header and footer.
+
+```{r dim}
+dim(met)
+head(met)
+tail(met)
+```
+
+How many rows and columns?
+
+### 3. Look at variables
+
+```{r str}
+str(met)
+```
+
+### 4. Take a closer look
+
+```{r table-year}
+table(met$year)
+```
+
+```{r table-day}
+table(met$day)
+```
+
+```{r temp}
+summary(met$temp)
+```
+
+```{r elev}
+summary(met$elev)
+```
+
+#### Data cleaning
+
+```{r correct-elev}
+met[met$elev==9999.0] <- NA
+summary(met$elev)
+```
+
+Remove temps of -40 celsius.
+```{r filter-temp}
+met <- met[temp>-40]
+met2 <- met[order(temp)]
+head(met2)
+```
+
+
+### 5. Check the data against an external data source.
+
+
