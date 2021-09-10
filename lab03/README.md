@@ -281,65 +281,17 @@ met[elev==max(elev,na.rm=TRUE)][, summary(temp)]
 
 ``` r
 elev <- met[elev==max(elev,na.rm=TRUE)]
-summary(elev)
+summary(elev[,.(wind.dir,wind.sp)])
 ```
 
-    ##      USAFID            WBAN          year          month        day      
-    ##  Min.   :720385   Min.   :419   Min.   :2019   Min.   :8   Min.   : 1.0  
-    ##  1st Qu.:720385   1st Qu.:419   1st Qu.:2019   1st Qu.:8   1st Qu.: 8.0  
-    ##  Median :720385   Median :419   Median :2019   Median :8   Median :16.0  
-    ##  Mean   :720385   Mean   :419   Mean   :2019   Mean   :8   Mean   :16.1  
-    ##  3rd Qu.:720385   3rd Qu.:419   3rd Qu.:2019   3rd Qu.:8   3rd Qu.:24.0  
-    ##  Max.   :720385   Max.   :419   Max.   :2019   Max.   :8   Max.   :31.0  
-    ##                                                                          
-    ##       hour            min             lat            lon              elev     
-    ##  Min.   : 0.00   Min.   : 6.00   Min.   :39.8   Min.   :-105.8   Min.   :4113  
-    ##  1st Qu.: 6.00   1st Qu.:13.00   1st Qu.:39.8   1st Qu.:-105.8   1st Qu.:4113  
-    ##  Median :12.00   Median :36.00   Median :39.8   Median :-105.8   Median :4113  
-    ##  Mean   :11.66   Mean   :34.38   Mean   :39.8   Mean   :-105.8   Mean   :4113  
-    ##  3rd Qu.:18.00   3rd Qu.:53.00   3rd Qu.:39.8   3rd Qu.:-105.8   3rd Qu.:4113  
-    ##  Max.   :23.00   Max.   :59.00   Max.   :39.8   Max.   :-105.8   Max.   :4113  
-    ##                                                                                
-    ##     wind.dir     wind.dir.qc        wind.type.code        wind.sp      
-    ##  Min.   : 10.0   Length:2117        Length:2117        Min.   : 0.000  
-    ##  1st Qu.:250.0   Class :character   Class :character   1st Qu.: 4.100  
-    ##  Median :300.0   Mode  :character   Mode  :character   Median : 6.700  
-    ##  Mean   :261.5                                         Mean   : 7.245  
-    ##  3rd Qu.:310.0                                         3rd Qu.: 9.800  
-    ##  Max.   :360.0                                         Max.   :21.100  
-    ##  NA's   :237                                           NA's   :168     
-    ##   wind.sp.qc          ceiling.ht    ceiling.ht.qc   ceiling.ht.method 
-    ##  Length:2117        Min.   :   30   Min.   :5.000   Length:2117       
-    ##  Class :character   1st Qu.: 2591   1st Qu.:5.000   Class :character  
-    ##  Mode  :character   Median :22000   Median :5.000   Mode  :character  
-    ##                     Mean   :15145   Mean   :5.008                     
-    ##                     3rd Qu.:22000   3rd Qu.:5.000                     
-    ##                     Max.   :22000   Max.   :9.000                     
-    ##                     NA's   :4                                         
-    ##    sky.cond            vis.dist     vis.dist.qc          vis.var         
-    ##  Length:2117        Min.   :    0   Length:2117        Length:2117       
-    ##  Class :character   1st Qu.:16093   Class :character   Class :character  
-    ##  Mode  :character   Median :16093   Mode  :character   Mode  :character  
-    ##                     Mean   :15913                                        
-    ##                     3rd Qu.:16093                                        
-    ##                     Max.   :16093                                        
-    ##                     NA's   :683                                          
-    ##   vis.var.qc             temp         temp.qc            dew.point      
-    ##  Length:2117        Min.   : 1.00   Length:2117        Min.   :-6.0000  
-    ##  Class :character   1st Qu.: 6.00   Class :character   1st Qu.: 0.0000  
-    ##  Mode  :character   Median : 8.00   Mode  :character   Median : 0.0000  
-    ##                     Mean   : 8.13                      Mean   : 0.8729  
-    ##                     3rd Qu.:10.00                      3rd Qu.: 2.0000  
-    ##                     Max.   :15.00                      Max.   : 7.0000  
-    ##                                                                         
-    ##  dew.point.qc         atm.press     atm.press.qc       rh       
-    ##  Length:2117        Min.   : NA    Min.   :9     Min.   :53.63  
-    ##  Class :character   1st Qu.: NA    1st Qu.:9     1st Qu.:58.10  
-    ##  Mode  :character   Median : NA    Median :9     Median :61.39  
-    ##                     Mean   :NaN    Mean   :9     Mean   :60.62  
-    ##                     3rd Qu.: NA    3rd Qu.:9     3rd Qu.:61.85  
-    ##                     Max.   : NA    Max.   :9     Max.   :70.01  
-    ##                     NA's   :2117
+    ##     wind.dir        wind.sp      
+    ##  Min.   : 10.0   Min.   : 0.000  
+    ##  1st Qu.:250.0   1st Qu.: 4.100  
+    ##  Median :300.0   Median : 6.700  
+    ##  Mean   :261.5   Mean   : 7.245  
+    ##  3rd Qu.:310.0   3rd Qu.: 9.800  
+    ##  Max.   :360.0   Max.   :21.100  
+    ##  NA's   :237     NA's   :168
 
 ``` r
 met[elev==max(elev,na.rm=TRUE), .(

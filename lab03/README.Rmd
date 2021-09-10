@@ -103,9 +103,10 @@ met[elev==max(elev,na.rm=TRUE)][, summary(wind.sp)]
 met[elev==max(elev,na.rm=TRUE)][, summary(temp)]
 ```
 
+
 ```{r max-elev-site}
 elev <- met[elev==max(elev,na.rm=TRUE)]
-summary(elev)
+summary(elev[,.(wind.dir,wind.sp)])
 ```
 
 
