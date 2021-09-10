@@ -3,10 +3,12 @@ title: "03-lab-EDA"
 author: "ks"
 date: "9/10/2021"
 output: github_document
+always_allow_html: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(repos = c(CRAN = "http://cran.rstudio.com"))
 ```
 
 ## Lab week 3
@@ -15,6 +17,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r install-libraries}
 if (!require(data.table)) {install.packages("data.table")}
 library(data.table)
+library(tidyverse)
+library(leaflet)
 ```
 
 ### 1. Read in the data
@@ -90,6 +94,8 @@ head(met2)
 
 ### 5. Check the data against an external data source.
 
+skip a few steps here...
+
 ### 6. Compute summary statistics
 
 ```{r elev-sum}
@@ -120,8 +126,54 @@ We should look at the distributions of all of the key variables to make sure the
 hist(met$elev, breaks=100)
 ```
 
+```{r}
+hist(met$wind.sp)
+```
+
+One thing we should consider for later analyses is to log transform wind speed and elevation as the are very skewed.
+
+Look at where the weather station with highest elevation is located.
+
+```{r}
+leaflet(elev) %>%
+  addProviderTiles('OpenStreetMap') %>% 
+  addCircles(lat=~lat,lng=~lon, opacity=1, fillOpacity=1, radius=100)
+```
 
 
+Look at the time series of temperature and wind speed at this location. For this we will need to create a date-time variable for the x-axis.
+
+```{r}
+library(lubridate)
+elev$date <- with(elev, ymd_hm(paste(year, month, day, hour, min, sep= ' ')))
+summary(elev$date)
+```
+
+```{r}
+elev <- elev[order(date)]
+head(elev)
+```
+
+With the date-time variable we can plot the time series of temperature and wind speed.
+
+
+```{r}
+plot(elev$date, elev$temp, type='l')
+#elev[,plot(date,temp,type="l")]
+```
+
+```{r}
+plot(elev$date, elev$wind.sp, type='l')
+```
+
+Summarize any trends that you see in these time-series plots.
+
+```{r}
+elev2 <- elev[!is.na(wind.sp)]
+plot(elev2$date, elev2$wind.sp, type='l')
+lines(smooth.spline(elev2$date, elev2$wind.sp,
+                    nknots=7),col=2,lwd=2)
+```
 
 ###  SessionInfo
 
