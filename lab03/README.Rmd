@@ -135,11 +135,12 @@ One thing we should consider for later analyses is to log transform wind speed a
 Look at where the weather station with highest elevation is located.
 
 ```{r}
-leaflet(elev) %>%
-  addProviderTiles('OpenStreetMap') %>% 
-  addCircles(lat=~lat,lng=~lon, opacity=1, fillOpacity=1, radius=100)
+#leaflet(elev) %>%
+  #addProviderTiles('OpenStreetMap') %>% 
+  #addCircles(lat=~lat,lng=~lon, opacity=1, #fillOpacity=1, radius=100)
 ```
 
+The above doesn't render in .md.
 
 Look at the time series of temperature and wind speed at this location. For this we will need to create a date-time variable for the x-axis.
 
