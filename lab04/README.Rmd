@@ -1,0 +1,78 @@
+---
+title: "lab 4"
+author: "ks"
+date: "9/17/2021"
+output: github_document
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Lab week 4
+
+```{r install-libraries}
+if (!require(data.table)) {install.packages("data.table")}
+library(data.table)
+library(tidyverse)
+library(leaflet)
+```
+
+### 1. Read in the data
+
+First read the data into a data.table.
+
+```{r readdata}
+if (!file.exists("~kims/GitHub/pm566-202103-labs/lab03/met_all.gz")) {
+download.file("https://raw.githubusercontent.com/USCbiostats/data-science-data/master/02_met/met_all.gz", "met_all.gz", method="libcurl", timeout = 60)
+}
+met <- data.table::fread("~kims/GitHub/pm566-202103-labs/lab03/met_all.gz")
+```
+
+## 2. Prepare the data
+
+
+```{r prep-data}
+#Remove temperatures less than -17C.
+met <- met[temp>-17]
+
+#Make sure there are no missing data in the key variables coded as 9999, 999, etc
+#temp, rh, wind.sp, vis.dist, dew.point, lat, lon, and elev.
+met[,range(temp,na.rm=T)]
+met[,range(rh,na.rm=T)]
+met[,range(wind.sp,na.rm=T)]
+met[,range(vis.dist,na.rm=T)]
+met[,range(dew.point,na.rm=T)]
+met[,range(lat,na.rm=T)]
+met[,range(lon,na.rm=T)]
+met[,range(elev,na.rm=T)]
+
+met[elev==9999.0, elev:= NA ]
+
+#Generate a date variable using the functions as.Date() (hint: You will need the following to create a date paste(year, month, day, sep = "-")).
+met[,ymd := as.Date(paste(year, month, day, sep = "-"))]
+
+#Using the data.table::week function, keep the observations of the first week of the month.
+met[,table(week(ymd))]
+met <- met[ week(ymd) == 31]
+dim(met)
+
+#Compute the mean by station of the variables temp, rh, wind.sp, vis.dist, dew.point, lat, lon, and elev.
+met_avg <- met[,.(
+   temp      = mean(temp,na.rm=T),
+   rh        = mean(rh,na.rm=T),
+   wind.sp   = mean(wind.sp,na.rm=T),
+   vis.dist  = mean(vis.dist,na.rm=T),
+   dew.point = mean(dew.point,na.rm=T),
+   lat       = mean(lat,na.rm=T),
+   lon       = mean(lon,na.rm=T),
+   elev      = mean(elev,na.rm=T)
+)]
+#Create a region variable for NW, SW, NE, SE based on lon = -98.00 and lat = 39.71 degrees
+#Create a categorical variable for elevation as in the lecture slides
+
+
+
+```
+
