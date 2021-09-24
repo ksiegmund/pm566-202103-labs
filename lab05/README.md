@@ -217,11 +217,75 @@ Start by computing the states’ average temperature. Use that measurement
 to classify them according to the following criteria:
 
 low: temp &lt; 20 Mid: temp &gt;= 20 and temp &lt; 25 High: temp &gt;=
-25 Once you are done with that, you can compute the following:
+25
+
+``` r
+dat[, state_temp := mean(temp,na.rm = TRUE), by = STATE]
+dat[, temp_cat   := fifelse(
+  state_temp < 20, "low-temp",
+  fifelse(state_temp < 25, "mid-temp","high-temp"))
+  ]
+head(dat)
+```
+
+    ##    USAFID  WBAN year month day hour min  lat      lon elev wind.dir wind.dir.qc
+    ## 1: 690150 93121 2019     8   1    0  56 34.3 -116.166  696      220           5
+    ## 2: 690150 93121 2019     8   1    1  56 34.3 -116.166  696      230           5
+    ## 3: 690150 93121 2019     8   1    2  56 34.3 -116.166  696      230           5
+    ## 4: 690150 93121 2019     8   1    3  56 34.3 -116.166  696      210           5
+    ## 5: 690150 93121 2019     8   1    4  56 34.3 -116.166  696      120           5
+    ## 6: 690150 93121 2019     8   1    5  56 34.3 -116.166  696       NA           9
+    ##    wind.type.code wind.sp wind.sp.qc ceiling.ht ceiling.ht.qc ceiling.ht.method
+    ## 1:              N     5.7          5      22000             5                 9
+    ## 2:              N     8.2          5      22000             5                 9
+    ## 3:              N     6.7          5      22000             5                 9
+    ## 4:              N     5.1          5      22000             5                 9
+    ## 5:              N     2.1          5      22000             5                 9
+    ## 6:              C     0.0          5      22000             5                 9
+    ##    sky.cond vis.dist vis.dist.qc vis.var vis.var.qc temp temp.qc dew.point
+    ## 1:        N    16093           5       N          5 37.2       5      10.6
+    ## 2:        N    16093           5       N          5 35.6       5      10.6
+    ## 3:        N    16093           5       N          5 34.4       5       7.2
+    ## 4:        N    16093           5       N          5 33.3       5       5.0
+    ## 5:        N    16093           5       N          5 32.8       5       5.0
+    ## 6:        N    16093           5       N          5 31.1       5       5.6
+    ##    dew.point.qc atm.press atm.press.qc       rh CTRY STATE state_temp temp_cat
+    ## 1:            5    1009.9            5 19.88127   US    CA   22.36199 mid-temp
+    ## 2:            5    1010.3            5 21.76098   US    CA   22.36199 mid-temp
+    ## 3:            5    1010.6            5 18.48212   US    CA   22.36199 mid-temp
+    ## 4:            5    1011.6            5 16.88862   US    CA   22.36199 mid-temp
+    ## 5:            5    1012.7            5 17.38410   US    CA   22.36199 mid-temp
+    ## 6:            5    1012.7            5 20.01540   US    CA   22.36199 mid-temp
+
+Let’s make sure we don’t have NAs
+
+``` r
+#table(dat$temp_cat,useNA=always)
+```
+
+Once you are done with that, you can compute the following:
 
 Number of entries (records), Number of NA entries, Number of stations,
 Number of states included, and Mean temperature, wind-speed, and
 atmospheric pressure. All by the levels described before.
+
+``` r
+tab <- dat[, .(
+    N_entries = .N,
+    N_stations = length(unique(USAFID)),
+    N_states = length(unique(STATE)),
+    avg_temp = mean(temp, na.rm = TRUE)
+)
+    , by = temp_cat]
+
+knitr::kable(tab)
+```
+
+| temp\_cat | N\_entries | N\_stations | N\_states | avg\_temp |
+|:----------|-----------:|------------:|----------:|----------:|
+| mid-temp  |    1135423 |         781 |        25 |  22.39909 |
+| high-temp |     811126 |         555 |        12 |  27.75066 |
+| low-temp  |     430794 |         259 |        11 |  18.96446 |
 
 Knit the document, commit your changes, and push them to GitHub. If
 you’d like, you can take this time to include the link of the issue of
@@ -261,10 +325,10 @@ sessionInfo()
     ## [17] readxl_1.3.1      lifecycle_1.0.0   munsell_0.5.0     gtable_0.3.0     
     ## [21] cellranger_1.1.0  rvest_1.0.1       htmlwidgets_1.5.4 evaluate_0.14    
     ## [25] knitr_1.34        tzdb_0.1.2        fastmap_1.1.0     crosstalk_1.1.1  
-    ## [29] fansi_0.5.0       broom_0.7.9       Rcpp_1.0.7        scales_1.1.1     
-    ## [33] backports_1.2.1   jsonlite_1.7.2    fs_1.5.0          hms_1.1.0        
-    ## [37] digest_0.6.27     stringi_1.7.4     grid_4.1.0        cli_3.0.1        
-    ## [41] tools_4.1.0       magrittr_2.0.1    crayon_1.4.1      pkgconfig_2.0.3  
-    ## [45] ellipsis_0.3.2    xml2_1.3.2        reprex_2.0.1      lubridate_1.7.10 
-    ## [49] rstudioapi_0.13   assertthat_0.2.1  rmarkdown_2.10    httr_1.4.2       
-    ## [53] R6_2.5.1          compiler_4.1.0
+    ## [29] fansi_0.5.0       highr_0.9         broom_0.7.9       Rcpp_1.0.7       
+    ## [33] scales_1.1.1      backports_1.2.1   jsonlite_1.7.2    fs_1.5.0         
+    ## [37] hms_1.1.0         digest_0.6.27     stringi_1.7.4     grid_4.1.0       
+    ## [41] cli_3.0.1         tools_4.1.0       magrittr_2.0.1    crayon_1.4.1     
+    ## [45] pkgconfig_2.0.3   ellipsis_0.3.2    xml2_1.3.2        reprex_2.0.1     
+    ## [49] lubridate_1.7.10  rstudioapi_0.13   assertthat_0.2.1  rmarkdown_2.10   
+    ## [53] httr_1.4.2        R6_2.5.1          compiler_4.1.0
