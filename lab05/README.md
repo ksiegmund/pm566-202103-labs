@@ -26,7 +26,7 @@ library(tidyverse)
     ## x purrr::transpose() masks data.table::transpose()
 
 ``` r
-#library(leaflet)
+library(leaflet)
 ```
 
 ### 1. Read in the met data
@@ -110,15 +110,23 @@ station_averages <- dat[,.(
 Now we want to find quantiles per variable.
 
 ``` r
-station_averages[,.(
+medians <- station_averages[,.(
   temp_50       = quantile(temp,      probs = 0.5, na.rm = TRUE),
   wind.sp_50    = quantile(wind.sp,   probs = 0.5, na.rm = TRUE),
   atm.press_50  = quantile(atm.press, probs = 0.5, na.rm = TRUE)
 )]
 ```
 
-    ##     temp_50 wind.sp_50 atm.press_50
-    ## 1: 23.68406   2.461838     23.68406
+Now we can find the stations that are closest to these. (hint: use the
+function ‘which.min()’)
+
+``` r
+station_averages[, temp_dist := abs(temp- medians$temp_50)]
+station_averages[order(temp_dist)][1]
+```
+
+    ##    USAFID     temp  wind.sp atm.press   temp_dist
+    ## 1: 720458 23.68173 1.209682  23.68173 0.002328907
 
 Knit the document, commit your changes, and Save it on GitHub. Don’t
 forget to add README.md to the tree, the first time you render it.
@@ -130,6 +138,61 @@ most representative, the median, station per state. This time, instead
 of looking at one variable at a time, look at the euclidean distance. If
 multiple stations show in the median, select the one located at the
 lowest latitude.
+
+``` r
+station_averages <- dat[,.(
+  temp      = mean(temp,na.rm = TRUE),
+  wind.sp   = mean(wind.sp,na.rm = TRUE),
+  atm.press = mean(temp,na.rm = TRUE)
+), by = .(USAFID,STATE)]
+```
+
+``` r
+station_averages[, temp_50 := quantile(temp,probs = 0.5, na.rm = TRUE), by = STATE]
+station_averages[, wind.sp_50 := quantile(wind.sp,probs = 0.5, na.rm = TRUE), by = STATE]  
+station_averages[, atm.press_50 := quantile(atm.press,probs = 0.5, na.rm = TRUE), by = STATE]
+head(station_averages)
+```
+
+    ##    USAFID STATE     temp  wind.sp atm.press  temp_50 wind.sp_50 atm.press_50
+    ## 1: 690150    CA 33.18763 3.483560  33.18763 22.66268   2.565445     22.66268
+    ## 2: 720110    TX 31.22003 2.138348  31.22003 29.75188   3.413737     29.75188
+    ## 3: 720113    MI 23.29317 2.470298  23.29317 20.51970   2.273423     20.51970
+    ## 4: 720120    SC 27.01922 2.504692  27.01922 25.80545   1.696119     25.80545
+    ## 5: 720137    IL 21.88823 1.979335  21.88823 22.43194   2.237622     22.43194
+    ## 6: 720151    TX 27.57686 2.998428  27.57686 29.75188   3.413737     29.75188
+
+``` r
+station_averages[, eucldist := sqrt(
+   (temp - temp_50)^2 + (wind.sp - wind.sp_50)^2
+)]
+station_averages
+```
+
+    ##       USAFID STATE     temp  wind.sp atm.press  temp_50 wind.sp_50 atm.press_50
+    ##    1: 690150    CA 33.18763 3.483560  33.18763 22.66268   2.565445     22.66268
+    ##    2: 720110    TX 31.22003 2.138348  31.22003 29.75188   3.413737     29.75188
+    ##    3: 720113    MI 23.29317 2.470298  23.29317 20.51970   2.273423     20.51970
+    ##    4: 720120    SC 27.01922 2.504692  27.01922 25.80545   1.696119     25.80545
+    ##    5: 720137    IL 21.88823 1.979335  21.88823 22.43194   2.237622     22.43194
+    ##   ---                                                                          
+    ## 1591: 726777    MT 19.15492 4.673878  19.15492 19.15492   4.151737     19.15492
+    ## 1592: 726797    MT 18.78980 2.858586  18.78980 19.15492   4.151737     19.15492
+    ## 1593: 726798    MT 19.47014 4.445783  19.47014 19.15492   4.151737     19.15492
+    ## 1594: 726810    ID 25.03549 3.039794  25.03549 20.56798   2.568944     20.56798
+    ## 1595: 726813    ID 23.47809 2.435372  23.47809 20.56798   2.568944     20.56798
+    ##         eucldist
+    ##    1: 10.5649277
+    ##    2:  1.9447578
+    ##    3:  2.7804480
+    ##    4:  1.4584280
+    ##    5:  0.6019431
+    ##   ---           
+    ## 1591:  0.5221409
+    ## 1592:  1.3437090
+    ## 1593:  0.4310791
+    ## 1594:  4.4922623
+    ## 1595:  2.9131751
 
 Knit the doc and save it on GitHub.
 
@@ -186,21 +249,22 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] forcats_0.5.1     stringr_1.4.0     dplyr_1.0.7       purrr_0.3.4      
-    ##  [5] readr_2.0.1       tidyr_1.1.3       tibble_3.1.4      ggplot2_3.3.5    
-    ##  [9] tidyverse_1.3.1   data.table_1.14.0
+    ##  [1] leaflet_2.0.4.1   forcats_0.5.1     stringr_1.4.0     dplyr_1.0.7      
+    ##  [5] purrr_0.3.4       readr_2.0.1       tidyr_1.1.3       tibble_3.1.4     
+    ##  [9] ggplot2_3.3.5     tidyverse_1.3.1   data.table_1.14.0
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] tidyselect_1.1.1 xfun_0.25        haven_2.4.3      colorspace_2.0-2
-    ##  [5] vctrs_0.3.8      generics_0.1.0   htmltools_0.5.2  yaml_2.2.1      
-    ##  [9] utf8_1.2.2       rlang_0.4.11     pillar_1.6.2     glue_1.4.2      
-    ## [13] withr_2.4.2      DBI_1.1.1        dbplyr_2.1.1     modelr_0.1.8    
-    ## [17] readxl_1.3.1     lifecycle_1.0.0  munsell_0.5.0    gtable_0.3.0    
-    ## [21] cellranger_1.1.0 rvest_1.0.1      evaluate_0.14    knitr_1.34      
-    ## [25] tzdb_0.1.2       fastmap_1.1.0    fansi_0.5.0      broom_0.7.9     
-    ## [29] Rcpp_1.0.7       scales_1.1.1     backports_1.2.1  jsonlite_1.7.2  
-    ## [33] fs_1.5.0         hms_1.1.0        digest_0.6.27    stringi_1.7.4   
-    ## [37] grid_4.1.0       cli_3.0.1        tools_4.1.0      magrittr_2.0.1  
-    ## [41] crayon_1.4.1     pkgconfig_2.0.3  ellipsis_0.3.2   xml2_1.3.2      
-    ## [45] reprex_2.0.1     lubridate_1.7.10 rstudioapi_0.13  assertthat_0.2.1
-    ## [49] rmarkdown_2.10   httr_1.4.2       R6_2.5.1         compiler_4.1.0
+    ##  [1] tidyselect_1.1.1  xfun_0.25         haven_2.4.3       colorspace_2.0-2 
+    ##  [5] vctrs_0.3.8       generics_0.1.0    htmltools_0.5.2   yaml_2.2.1       
+    ##  [9] utf8_1.2.2        rlang_0.4.11      pillar_1.6.2      glue_1.4.2       
+    ## [13] withr_2.4.2       DBI_1.1.1         dbplyr_2.1.1      modelr_0.1.8     
+    ## [17] readxl_1.3.1      lifecycle_1.0.0   munsell_0.5.0     gtable_0.3.0     
+    ## [21] cellranger_1.1.0  rvest_1.0.1       htmlwidgets_1.5.4 evaluate_0.14    
+    ## [25] knitr_1.34        tzdb_0.1.2        fastmap_1.1.0     crosstalk_1.1.1  
+    ## [29] fansi_0.5.0       broom_0.7.9       Rcpp_1.0.7        scales_1.1.1     
+    ## [33] backports_1.2.1   jsonlite_1.7.2    fs_1.5.0          hms_1.1.0        
+    ## [37] digest_0.6.27     stringi_1.7.4     grid_4.1.0        cli_3.0.1        
+    ## [41] tools_4.1.0       magrittr_2.0.1    crayon_1.4.1      pkgconfig_2.0.3  
+    ## [45] ellipsis_0.3.2    xml2_1.3.2        reprex_2.0.1      lubridate_1.7.10 
+    ## [49] rstudioapi_0.13   assertthat_0.2.1  rmarkdown_2.10    httr_1.4.2       
+    ## [53] R6_2.5.1          compiler_4.1.0

@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r install-libraries}
 library(data.table)
 library(tidyverse)
-#library(leaflet)
+library(leaflet)
 ```
 
 ### 1. Read in the met data
@@ -84,11 +84,18 @@ station_averages <- dat[,.(
 Now we want to find quantiles per variable.
 
 ```{r quantiles}
-station_averages[,.(
+medians <- station_averages[,.(
   temp_50       = quantile(temp,      probs = 0.5, na.rm = TRUE),
   wind.sp_50    = quantile(wind.sp,   probs = 0.5, na.rm = TRUE),
   atm.press_50  = quantile(atm.press, probs = 0.5, na.rm = TRUE)
 )]
+```
+
+Now we can find the stations that are closest to these. (hint: use the function 'which.min()')
+
+```{r dist-to-median}
+station_averages[, temp_dist := abs(temp- medians$temp_50)]
+station_averages[order(temp_dist)][1]
 ```
 
 
@@ -97,6 +104,30 @@ Knit the document, commit your changes, and Save it on GitHub. Don’t forget to
 ### Question 2: Representative station per state
 
 Just like the previous question, you are asked to identify what is the most representative, the median, station per state. This time, instead of looking at one variable at a time, look at the euclidean distance. If multiple stations show in the median, select the one located at the lowest latitude.
+
+```{r collapsing-by-station2}
+station_averages <- dat[,.(
+  temp      = mean(temp,na.rm = TRUE),
+  wind.sp   = mean(wind.sp,na.rm = TRUE),
+  atm.press = mean(temp,na.rm = TRUE)
+), by = .(USAFID,STATE)]
+```
+
+```{r quantiles2}
+station_averages[, temp_50 := quantile(temp,probs = 0.5, na.rm = TRUE), by = STATE]
+station_averages[, wind.sp_50 := quantile(wind.sp,probs = 0.5, na.rm = TRUE), by = STATE]  
+station_averages[, atm.press_50 := quantile(atm.press,probs = 0.5, na.rm = TRUE), by = STATE]
+head(station_averages)
+```
+
+```{r euclid-dist}
+station_averages[, eucldist := sqrt(
+   (temp - temp_50)^2 + (wind.sp - wind.sp_50)^2
+)]
+station_averages
+
+```
+
 
 Knit the doc and save it on GitHub.
 
