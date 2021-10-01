@@ -46,6 +46,10 @@ library(tidyverse)
     ## x purrr::transpose() masks data.table::transpose()
 
 ``` r
+library(forcats)
+```
+
+``` r
 fn <- "mtsamples.csv"
 if (!file.exists(fn))
   download.file(
@@ -123,7 +127,16 @@ ggplot(mtsamples, aes(x = medical_specialty)) +
 
     ## Warning: Ignoring unknown parameters: binwidth, bins, pad
 
-![](README_files/figure-gfm/dist-1.png)<!-- -->
+![](README_files/figure-gfm/dist1-1.png)<!-- -->
+
+Let’s order these using the forcats library.
+
+``` r
+ggplot(specialties, aes(x = n, y = fct_reorder(medical_specialty, n))) +
+  geom_col()
+```
+
+![](README_files/figure-gfm/dist2-1.png)<!-- -->
 
 These are not evenly (uniformly) distributed.
 
@@ -134,13 +147,18 @@ frequent words Explain what we see from this result. Does it makes
 sense? What insights (if any) do we get?
 
 ``` r
-#mtsamples %>%
-#  unnest_tokens(token, text)  %>%
-#  count(token, sort = TRUE) %>%
-##  top_n(20, n)  %>%
-#  ggplot(aes(n, fct_reorder(token, n))) +
-#  geom_col()
+mtsamples %>%
+  unnest_tokens(output = word, input = transcription) %>%
+  count(word, sort = TRUE) %>%
+  top_n(20, n) %>%
+  ggplot(aes(n, fct_reorder(word, n))) +
+  geom_col()
 ```
+
+![](README_files/figure-gfm/tokenize-transcription-1.png)<!-- -->
+
+The word “patient” seems to be important, but we observe a lot of
+stopwords.
 
 ### Question 3.
 
@@ -149,14 +167,18 @@ remove numbers as well. What do we see know that we have removed stop
 words? Does it give us a better idea of what the text is about?
 
 ``` r
-#mtsamples %>%
-#  unnest_tokens(word, text) %>%
-#  anti_join(stop_words, by = c("word")) %>%
-#  count(word, sort = TRUE) %>%
-#  top_n(20, n) %>%
-#  ggplot(aes(n, fct_reorder(word, n))) +
-#  geom_col()
+mtsamples %>%
+  unnest_tokens(output = word, input = transcription) %>%
+  count(word, sort = TRUE) %>%
+  anti_join(stop_words, by = c("word")) %>%
+  top_n(20, n) %>%
+  ggplot(aes(n, fct_reorder(word, n))) +
+  geom_col()
 ```
+
+![](README_files/figure-gfm/transcript-wo-stop-words-1.png)<!-- -->
+
+Looking better, but we don’t like the numbers.
 
 ### Question 4:
 
@@ -250,11 +272,12 @@ sessionInfo()
     ## [17] rstudioapi_0.13   Matrix_1.3-4      rmarkdown_2.10    labeling_0.4.2   
     ## [21] munsell_0.5.0     broom_0.7.9       compiler_4.1.0    janeaustenr_0.1.5
     ## [25] modelr_0.1.8      xfun_0.25         pkgconfig_2.0.3   htmltools_0.5.2  
-    ## [29] tidyselect_1.1.1  fansi_0.5.0       crayon_1.4.1      tzdb_0.1.2       
-    ## [33] dbplyr_2.1.1      withr_2.4.2       SnowballC_0.7.0   grid_4.1.0       
-    ## [37] jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.0   DBI_1.1.1        
-    ## [41] magrittr_2.0.1    scales_1.1.1      tokenizers_0.2.1  cli_3.0.1        
-    ## [45] stringi_1.7.4     farver_2.1.0      fs_1.5.0          xml2_1.3.2       
-    ## [49] ellipsis_0.3.2    generics_0.1.0    vctrs_0.3.8       tools_4.1.0      
-    ## [53] glue_1.4.2        hms_1.1.0         fastmap_1.1.0     yaml_2.2.1       
-    ## [57] colorspace_2.0-2  rvest_1.0.1       knitr_1.34        haven_2.4.3
+    ## [29] tidyselect_1.1.1  codetools_0.2-18  fansi_0.5.0       crayon_1.4.1     
+    ## [33] tzdb_0.1.2        dbplyr_2.1.1      withr_2.4.2       SnowballC_0.7.0  
+    ## [37] grid_4.1.0        jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.0  
+    ## [41] DBI_1.1.1         magrittr_2.0.1    scales_1.1.1      tokenizers_0.2.1 
+    ## [45] cli_3.0.1         stringi_1.7.4     farver_2.1.0      fs_1.5.0         
+    ## [49] xml2_1.3.2        ellipsis_0.3.2    generics_0.1.0    vctrs_0.3.8      
+    ## [53] tools_4.1.0       glue_1.4.2        hms_1.1.0         fastmap_1.1.0    
+    ## [57] yaml_2.2.1        colorspace_2.0-2  rvest_1.0.1       knitr_1.34       
+    ## [61] haven_2.4.3

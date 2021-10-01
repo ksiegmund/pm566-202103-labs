@@ -19,6 +19,7 @@ library(ggplot2)
 library(dplyr)
 library(tidytext)
 library(tidyverse)
+library(forcats)
 ```
 
 
@@ -61,9 +62,10 @@ ggplot(mtsamples, aes(x = medical_specialty)) +
   coord_flip()
 ```
 
+Let's order these using the forcats library.
+
 ```{r dist2}
-library(forcats)
-ggplot(mtsamples, aes(n, fct_reorder(medical_specialties, n))) +
+ggplot(specialties, aes(x = n, y = fct_reorder(medical_specialty, n))) +
   geom_col()
 ```
 
