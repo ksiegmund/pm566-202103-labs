@@ -272,12 +272,11 @@ sessionInfo()
     ## [17] rstudioapi_0.13   Matrix_1.3-4      rmarkdown_2.10    labeling_0.4.2   
     ## [21] munsell_0.5.0     broom_0.7.9       compiler_4.1.0    janeaustenr_0.1.5
     ## [25] modelr_0.1.8      xfun_0.25         pkgconfig_2.0.3   htmltools_0.5.2  
-    ## [29] tidyselect_1.1.1  codetools_0.2-18  fansi_0.5.0       crayon_1.4.1     
-    ## [33] tzdb_0.1.2        dbplyr_2.1.1      withr_2.4.2       SnowballC_0.7.0  
-    ## [37] grid_4.1.0        jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.0  
-    ## [41] DBI_1.1.1         magrittr_2.0.1    scales_1.1.1      tokenizers_0.2.1 
-    ## [45] cli_3.0.1         stringi_1.7.4     farver_2.1.0      fs_1.5.0         
-    ## [49] xml2_1.3.2        ellipsis_0.3.2    generics_0.1.0    vctrs_0.3.8      
-    ## [53] tools_4.1.0       glue_1.4.2        hms_1.1.0         fastmap_1.1.0    
-    ## [57] yaml_2.2.1        colorspace_2.0-2  rvest_1.0.1       knitr_1.34       
-    ## [61] haven_2.4.3
+    ## [29] tidyselect_1.1.1  fansi_0.5.0       crayon_1.4.1      tzdb_0.1.2       
+    ## [33] dbplyr_2.1.1      withr_2.4.2       SnowballC_0.7.0   grid_4.1.0       
+    ## [37] jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.0   DBI_1.1.1        
+    ## [41] magrittr_2.0.1    scales_1.1.1      tokenizers_0.2.1  cli_3.0.1        
+    ## [45] stringi_1.7.4     farver_2.1.0      fs_1.5.0          xml2_1.3.2       
+    ## [49] ellipsis_0.3.2    generics_0.1.0    vctrs_0.3.8       tools_4.1.0      
+    ## [53] glue_1.4.2        hms_1.1.0         fastmap_1.1.0     yaml_2.2.1       
+    ## [57] colorspace_2.0-2  rvest_1.0.1       knitr_1.34        haven_2.4.3
