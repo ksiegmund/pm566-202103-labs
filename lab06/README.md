@@ -180,28 +180,46 @@ mtsamples %>%
 
 Looking better, but we don’t like the numbers.
 
+``` r
+mtsamples %>%
+  unnest_tokens(output = word, input = transcription) %>%
+  count(word, sort = TRUE) %>%
+  anti_join(stop_words, by = c("word")) %>%
+  # using regular expressions to remove numbers
+  filter(!grepl(pattern = "^[0-9]+$",x = word)) %>%
+  top_n(20, n) %>%
+  ggplot(aes(n, fct_reorder(word, n))) +
+  geom_col()
+```
+
+![](README_files/figure-gfm/transcript-wo-stop-words-numbers-1.png)<!-- -->
+
 ### Question 4:
 
 repeat question 2, but this time tokenize into bi-grams. how does the
 result change if you look at tri-grams?
 
 ``` r
-#mtsamples %>%
-#  unnest_ngrams(ngram, text, n=2)  %>%
-#  count(ngram, sort = TRUE) %>%
-#  top_n(20, n)  %>%
-#  ggplot(aes(n, fct_reorder(ngram, n))) +
-#  geom_col()
+mtsamples %>%
+  unnest_ngrams(output = ngram, input = transcription, n=2)  %>%
+  count(ngram, sort = TRUE) %>%
+  top_n(20, n)  %>%
+  ggplot(aes(n, fct_reorder(ngram, n))) +
+  geom_col()
 ```
 
+![](README_files/figure-gfm/bigrams-1.png)<!-- -->
+
 ``` r
-#mtsamples %>%
-#  unnest_ngrams(ngram, text, n=3)  %>%
-#  count(ngram, sort = TRUE) %>%
-#  top_n(20, n)  %>%
-#  ggplot(aes(n, fct_reorder(ngram, n))) +
-#  geom_col()
+mtsamples %>%
+  unnest_ngrams(output = ngram, input = transcription, n=3)  %>%
+  count(ngram, sort = TRUE) %>%
+  top_n(20, n)  %>%
+  ggplot(aes(n, fct_reorder(ngram, n))) +
+  geom_col()
 ```
+
+![](README_files/figure-gfm/trigrams-1.png)<!-- -->
 
 ### Question 5.
 
@@ -209,22 +227,52 @@ Use the results you got from question 4. Pick a word and count the words
 that appears after and before it.
 
 ``` r
-#mtsamples %>%
-#  unnest_ngrams(ngram, text, n = 2) %>%
-#  separate(ngram, into = c("word1", "word2"), sep = " ") %>%
-#  select(word1, word2) %>%
-##  filter(word2 == "alice") %>%
-#  count(word1, sort = TRUE)
+mtsamples %>%
+  unnest_ngrams(output = ngram, input = transcription, n = 2) %>%
+ separate(ngram, into = c("word1", "word2"), sep = " ") %>%
+  select(word1, word2) %>%
+  filter(word2 == "patient") %>%
+ count(word1, sort = TRUE)
 ```
 
+    ## # A tibble: 269 × 2
+    ##    word1         n
+    ##    <chr>     <int>
+    ##  1 the       20307
+    ##  2 this        470
+    ##  3 history     101
+    ##  4 a            67
+    ##  5 and          47
+    ##  6 procedure    32
+    ##  7 female       26
+    ##  8 with         25
+    ##  9 use          24
+    ## 10 old          23
+    ## # … with 259 more rows
+
 ``` r
-#mtsamples %>%
-#  unnest_ngrams(ngram, text, n = 2) %>%
-#  separate(ngram, into = c("word1", "word2"), sep = " ") %>%
-#  select(word1, word2) %>%
-#  filter(word1 == "alice") %>%
-#  count(word2, sort = TRUE)
+mtsamples %>%
+  unnest_ngrams(output = ngram, input = transcription, n = 2) %>%
+  separate(ngram, into = c("word1", "word2"), sep = " ") %>%
+  select(word1, word2) %>%
+  filter(word1 == "patient") %>%
+  count(word2, sort = TRUE)
 ```
+
+    ## # A tibble: 588 × 2
+    ##    word2         n
+    ##    <chr>     <int>
+    ##  1 was        6293
+    ##  2 is         3332
+    ##  3 has        1417
+    ##  4 tolerated   994
+    ##  5 had         888
+    ##  6 will        616
+    ##  7 denies      552
+    ##  8 and         377
+    ##  9 states      363
+    ## 10 does        334
+    ## # … with 578 more rows
 
 ### Question 6.
 
@@ -272,11 +320,12 @@ sessionInfo()
     ## [17] rstudioapi_0.13   Matrix_1.3-4      rmarkdown_2.10    labeling_0.4.2   
     ## [21] munsell_0.5.0     broom_0.7.9       compiler_4.1.0    janeaustenr_0.1.5
     ## [25] modelr_0.1.8      xfun_0.25         pkgconfig_2.0.3   htmltools_0.5.2  
-    ## [29] tidyselect_1.1.1  fansi_0.5.0       crayon_1.4.1      tzdb_0.1.2       
-    ## [33] dbplyr_2.1.1      withr_2.4.2       SnowballC_0.7.0   grid_4.1.0       
-    ## [37] jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.0   DBI_1.1.1        
-    ## [41] magrittr_2.0.1    scales_1.1.1      tokenizers_0.2.1  cli_3.0.1        
-    ## [45] stringi_1.7.4     farver_2.1.0      fs_1.5.0          xml2_1.3.2       
-    ## [49] ellipsis_0.3.2    generics_0.1.0    vctrs_0.3.8       tools_4.1.0      
-    ## [53] glue_1.4.2        hms_1.1.0         fastmap_1.1.0     yaml_2.2.1       
-    ## [57] colorspace_2.0-2  rvest_1.0.1       knitr_1.34        haven_2.4.3
+    ## [29] tidyselect_1.1.1  codetools_0.2-18  fansi_0.5.0       crayon_1.4.1     
+    ## [33] tzdb_0.1.2        dbplyr_2.1.1      withr_2.4.2       SnowballC_0.7.0  
+    ## [37] grid_4.1.0        jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.0  
+    ## [41] DBI_1.1.1         magrittr_2.0.1    scales_1.1.1      tokenizers_0.2.1 
+    ## [45] cli_3.0.1         stringi_1.7.4     farver_2.1.0      fs_1.5.0         
+    ## [49] xml2_1.3.2        ellipsis_0.3.2    generics_0.1.0    vctrs_0.3.8      
+    ## [53] tools_4.1.0       glue_1.4.2        hms_1.1.0         fastmap_1.1.0    
+    ## [57] yaml_2.2.1        colorspace_2.0-2  rvest_1.0.1       knitr_1.34       
+    ## [61] haven_2.4.3

@@ -106,50 +106,60 @@ mtsamples %>%
 
 Looking better, but we don't like the numbers.
 
- 
+```{r transcript-wo-stop-words-numbers, cache=TRUE}
+mtsamples %>%
+  unnest_tokens(output = word, input = transcription) %>%
+  count(word, sort = TRUE) %>%
+  anti_join(stop_words, by = c("word")) %>%
+  # using regular expressions to remove numbers
+  filter(!grepl(pattern = "^[0-9]+$",x = word)) %>%
+  top_n(20, n) %>%
+  ggplot(aes(n, fct_reorder(word, n))) +
+  geom_col()
+```
 
 
 ### Question 4: 
 
 repeat question 2, but this time tokenize into bi-grams. how does the result change if you look at tri-grams?
 
-```{r bigrams}
-#mtsamples %>%
-#  unnest_ngrams(ngram, text, n=2)  %>%
-#  count(ngram, sort = TRUE) %>%
-#  top_n(20, n)  %>%
-#  ggplot(aes(n, fct_reorder(ngram, n))) +
-#  geom_col()
+```{r bigrams, cache = TRUE}
+mtsamples %>%
+  unnest_ngrams(output = ngram, input = transcription, n=2)  %>%
+  count(ngram, sort = TRUE) %>%
+  top_n(20, n)  %>%
+  ggplot(aes(n, fct_reorder(ngram, n))) +
+  geom_col()
 ```
 
-```{r trigrams}
-#mtsamples %>%
-#  unnest_ngrams(ngram, text, n=3)  %>%
-#  count(ngram, sort = TRUE) %>%
-#  top_n(20, n)  %>%
-#  ggplot(aes(n, fct_reorder(ngram, n))) +
-#  geom_col()
+```{r trigrams, cache = TRUE}
+mtsamples %>%
+  unnest_ngrams(output = ngram, input = transcription, n=3)  %>%
+  count(ngram, sort = TRUE) %>%
+  top_n(20, n)  %>%
+  ggplot(aes(n, fct_reorder(ngram, n))) +
+  geom_col()
 ```
 
 ### Question 5.
 Use the results you got from question 4. Pick a word and count the words that appears after and before it.
 
-```{r count-before-words}
-#mtsamples %>%
-#  unnest_ngrams(ngram, text, n = 2) %>%
-#  separate(ngram, into = c("word1", "word2"), sep = " ") %>%
-#  select(word1, word2) %>%
-##  filter(word2 == "alice") %>%
-#  count(word1, sort = TRUE)
+```{r count-before-words,  cache = TRUE}
+mtsamples %>%
+  unnest_ngrams(output = ngram, input = transcription, n = 2) %>%
+ separate(ngram, into = c("word1", "word2"), sep = " ") %>%
+  select(word1, word2) %>%
+  filter(word2 == "patient") %>%
+ count(word1, sort = TRUE)
 ```
 
-```{r count-after-words}
-#mtsamples %>%
-#  unnest_ngrams(ngram, text, n = 2) %>%
-#  separate(ngram, into = c("word1", "word2"), sep = " ") %>%
-#  select(word1, word2) %>%
-#  filter(word1 == "alice") %>%
-#  count(word2, sort = TRUE)
+```{r count-after-words,  cache = TRUE}
+mtsamples %>%
+  unnest_ngrams(output = ngram, input = transcription, n = 2) %>%
+  separate(ngram, into = c("word1", "word2"), sep = " ") %>%
+  select(word1, word2) %>%
+  filter(word1 == "patient") %>%
+  count(word2, sort = TRUE)
 ```
 
 ### Question 6.
