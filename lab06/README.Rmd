@@ -18,7 +18,7 @@ library(data.table)
 library(ggplot2)
 library(dplyr)
 library(tidytext)
-library(tibble)
+library(tidyverse)
 ```
 
 
@@ -42,22 +42,49 @@ Loading in reference transcription samples from https://www.mtsamples.com/
 We can use count() from dplyr to figure out how many different categories do we have? Are these categories related? overlapping? evenly distributed?
 
 ```{r count, cache=TRUE}
-
+specialties <- mtsamples %>%
+   count(medical_specialty)
 ```
+
+There are `r nrow(specialties)` specialties.
+
+```{r table}
+specialties %>%
+  arrange(desc(n)) %>%
+  top_n(15) %>%
+  knitr::kable()
+```
+
+```{r dist1}
+ggplot(mtsamples, aes(x = medical_specialty)) +
+  geom_histogram(stat = "count") +
+  coord_flip()
+```
+
+```{r dist2}
+library(forcats)
+ggplot(mtsamples, aes(n, fct_reorder(medical_specialties, n))) +
+  geom_col()
+```
+
+These are not evenly (uniformly) distributed.
 
 ### Question 2. Tokenize the the words in the transcription column
 Count the number of times each token appears
 Visualize the top 20 most frequent words
 Explain what we see from this result. Does it makes sense? What insights (if any) do we get?
 
-```{r tokenize, cache=TRUE}
-alice %>%
-  unnest_tokens(token, text)  %>%
-  count(token, sort = TRUE) %>%
-  top_n(20, n)  %>%
-  ggplot(aes(n, fct_reorder(token, n))) +
+```{r tokenize-transcription, cache=TRUE}
+mtsamples %>%
+  unnest_tokens(output = word, input = transcription) %>%
+  count(word, sort = TRUE) %>%
+  top_n(20, n) %>%
+  ggplot(aes(n, fct_reorder(word, n))) +
   geom_col()
 ```
+
+The word "patient" seems to be important, but we observe a lot of stopwords.
+
 
 ### Question 3. 
 
@@ -66,7 +93,7 @@ Bonus points if you remove numbers as well.
 What do we see know that we have removed stop words? Does it give us a better idea of what the text is about?
 
 ```{r remove-stop-words}
-alice %>%
+mtsamples %>%
   unnest_tokens(word, text) %>%
   anti_join(stop_words, by = c("word")) %>%
   count(word, sort = TRUE) %>%
@@ -80,42 +107,42 @@ alice %>%
 repeat question 2, but this time tokenize into bi-grams. how does the result change if you look at tri-grams?
 
 ```{r bigrams}
-alice %>%
-  unnest_ngrams(ngram, text, n=2)  %>%
-  count(ngram, sort = TRUE) %>%
-  top_n(20, n)  %>%
-  ggplot(aes(n, fct_reorder(ngram, n))) +
-  geom_col()
+#mtsamples %>%
+#  unnest_ngrams(ngram, text, n=2)  %>%
+#  count(ngram, sort = TRUE) %>%
+#  top_n(20, n)  %>%
+#  ggplot(aes(n, fct_reorder(ngram, n))) +
+#  geom_col()
 ```
 
 ```{r trigrams}
-alice %>%
-  unnest_ngrams(ngram, text, n=3)  %>%
-  count(ngram, sort = TRUE) %>%
-  top_n(20, n)  %>%
-  ggplot(aes(n, fct_reorder(ngram, n))) +
-  geom_col()
+#mtsamples %>%
+#  unnest_ngrams(ngram, text, n=3)  %>%
+#  count(ngram, sort = TRUE) %>%
+#  top_n(20, n)  %>%
+#  ggplot(aes(n, fct_reorder(ngram, n))) +
+#  geom_col()
 ```
 
 ### Question 5.
 Use the results you got from question 4. Pick a word and count the words that appears after and before it.
 
 ```{r count-before-words}
-alice %>%
-  unnest_ngrams(ngram, text, n = 2) %>%
-  separate(ngram, into = c("word1", "word2"), sep = " ") %>%
-  select(word1, word2) %>%
-  filter(word2 == "alice") %>%
-  count(word1, sort = TRUE)
+#mtsamples %>%
+#  unnest_ngrams(ngram, text, n = 2) %>%
+#  separate(ngram, into = c("word1", "word2"), sep = " ") %>%
+#  select(word1, word2) %>%
+##  filter(word2 == "alice") %>%
+#  count(word1, sort = TRUE)
 ```
 
 ```{r count-after-words}
-alice %>%
-  unnest_ngrams(ngram, text, n = 2) %>%
-  separate(ngram, into = c("word1", "word2"), sep = " ") %>%
-  select(word1, word2) %>%
-  filter(word1 == "alice") %>%
-  count(word2, sort = TRUE)
+#mtsamples %>%
+#  unnest_ngrams(ngram, text, n = 2) %>%
+#  separate(ngram, into = c("word1", "word2"), sep = " ") %>%
+#  select(word1, word2) %>%
+#  filter(word1 == "alice") %>%
+#  count(word2, sort = TRUE)
 ```
 
 ### Question 6.
@@ -128,89 +155,8 @@ Which words are most used in each of the specialties. you can use group_by() and
 
 Knit the document, commit your changes, and Save it on GitHub. Don’t forget to add README.md to the tree, the first time you render it.
 
-### Question 2: Representative station per state
-
-Just like the previous question, you are asked to identify what is the most representative, the median, station per state. This time, instead of looking at one variable at a time, look at the euclidean distance. If multiple stations show in the median, select the one located at the lowest latitude.
-
-```{r collapsing-by-station2}
-station_averages <- dat[,.(
-  temp      = mean(temp,na.rm = TRUE),
-  wind.sp   = mean(wind.sp,na.rm = TRUE),
-  atm.press = mean(temp,na.rm = TRUE)
-), by = .(USAFID,STATE)]
-```
-
-```{r quantiles2}
-station_averages[, temp_50 := quantile(temp,probs = 0.5, na.rm = TRUE), by = STATE]
-station_averages[, wind.sp_50 := quantile(wind.sp,probs = 0.5, na.rm = TRUE), by = STATE]  
-station_averages[, atm.press_50 := quantile(atm.press,probs = 0.5, na.rm = TRUE), by = STATE]
-head(station_averages)
-```
-
-```{r euclid-dist}
-station_averages[, eucldist := sqrt(
-   (temp - temp_50)^2 + (wind.sp - wind.sp_50)^2
-)]
-station_averages
-
-```
-
 
 Knit the doc and save it on GitHub.
-
-### Question 3: In the middle?
-
-For each state, identify what is the station that is closest to the mid-point of the state. Combining these with the stations you identified in the previous question, use leaflet() to visualize all ~100 points in the same figure, applying different colors for those identified in this question.
-
-Knit the doc and save it on GitHub.
-
-### Question 4: Means of means
-
-Using the quantile() function, generate a summary table that shows the number of states included, average temperature, wind-speed, and atmospheric pressure by the variable “average temperature level,” which you’ll need to create.
-
-Start by computing the states’ average temperature. Use that measurement to classify them according to the following criteria:
-
-low: temp < 20
-Mid: temp >= 20 and temp < 25
-High: temp >= 25
-
-```{r state-temp}
-dat[, state_temp := mean(temp,na.rm = TRUE), by = STATE]
-dat[, temp_cat   := fifelse(
-  state_temp < 20, "low-temp",
-  fifelse(state_temp < 25, "mid-temp","high-temp"))
-  ]
-head(dat)
-```
-Let's make sure we don't have NAs
-```{r}
-#table(dat$temp_cat,useNA=always)
-```
-
-Once you are done with that, you can compute the following:
-
-Number of entries (records),
-Number of NA entries,
-Number of stations,
-Number of states included, and
-Mean temperature, wind-speed, and atmospheric pressure.
-All by the levels described before.
-
-```{r}
-tab <- dat[, .(
-    N_entries = .N,
-    N_stations = length(unique(USAFID)),
-    N_states = length(unique(STATE)),
-    avg_temp = mean(temp, na.rm = TRUE)
-)
-    , by = temp_cat]
-
-knitr::kable(tab)
-```
-
-
-
-Knit the document, commit your changes, and push them to GitHub. If you’d like, you can take this time to include the link of the issue of the week so that you let us know when you are done, e.g.,
 
 git commit -a -m "Finalizing lab 5 https://github.com/USCbiostats/PM566/issues/23"
 
