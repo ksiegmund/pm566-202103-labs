@@ -92,15 +92,20 @@ Redo visualization but remove stop words before.
 Bonus points if you remove numbers as well.
 What do we see know that we have removed stop words? Does it give us a better idea of what the text is about?
 
-```{r remove-stop-words}
+```{r transcript-wo-stop-words, cache=TRUE}
 mtsamples %>%
-  unnest_tokens(word, text) %>%
-  anti_join(stop_words, by = c("word")) %>%
+  unnest_tokens(output = word, input = transcription) %>%
   count(word, sort = TRUE) %>%
+  anti_join(stop_words, by = c("word")) %>%
   top_n(20, n) %>%
   ggplot(aes(n, fct_reorder(word, n))) +
   geom_col()
 ```
+
+Looking better, but we don't like the numbers.
+
+
+
 
 ### Question 4: 
 
