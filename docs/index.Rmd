@@ -3,9 +3,9 @@ title: "lab 7"
 author: "ks"
 date: "10/08/2021"
 output:
+  html_document: default
   github_document: 
     html_preview: false
-  html_document: default
 always_allow_html: true
 ---
 
@@ -54,30 +54,34 @@ Use the function httr::GET() to make the following query:
 
 Baseline URL: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi
 
-Query parameters:  
+Query parameters:    
 
-db: pubmed  
-term: covid19 hawaii  
-retmax: 1000
+db: pubmed    
+term: covid19 hawaii    
+retmax: 1000  
 
 ```{r}
 library(httr)
 query_ids <- GET(
   url   = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi",
-  query = list(     db = "pubmed",
-                  term = "covid19 hawaii",
-                retmax = 1000)
+  query = list(     
+                db = "pubmed",
+              term = "covid19 hawaii",
+            retmax = 1000)
 )
-
-# Extracting the content of the response of GET
-ids <- httr::content(query_ids)
+query_ids
 ```
+
+
 
 Status: 200 means it succeeded.
 
 ```{r}
-query_ids
+# Extracting the content of the response of GET
+ids <- httr::content(query_ids)
+ids
 ```
+
 
 
 The query will return an XML object, we can turn it into a character list to analyze the text directly with as.character(). Another way of processing the data could be using lists with the function xml2::as_list(). We will skip the latter for now.
@@ -182,26 +186,24 @@ pub_char_list <- xml2::xml_children(pubs)
 pub_char_list <- sapply(pub_char_list, as.character)
 ```
 
-```{r}
-#cat(pub_char_list[1])
-```
-
 
 Now, extract the abstract and article title for each one of the elements of pub_char_list. You can either use sapply() as we just did, or simply take advantage of vectorization of stringr::str_extract
 
 ```{r}
-abstracts <- str_extract(pub_char_list, "<Abstract>[[:print:][:space:]]+</Abstract>")
-View(cbind(abstracts))
+#abstracts <- str_extract(pub_char_list, #"<Abstract>[[:print:][:space:]]+</Abstract>")
+#View(abstracts)
 ```
+
 ```{r}
-abstracts <- str_remove_all(abstracts, "</?[[:alnum:]-=\"]+>")
-abstracts <- str_replace_all(abstracts, "[[:space:]]+"," ")
+abstracts <- str_extract(pub_char_list, "<Abstract>[[:print:][:space:]]+</Abstract>")
+abstracts <- str_remove_all(abstracts, "</?[[:alnum:]-=\"]+>") 
+abstracts <- str_replace_all(abstracts, "[[:space:]]+", " ")
 ```
 
 How many of these don’t have an abstract? Now, the title
 
 ```{r}
-titles <- str_extract(pub_char_list, "<Title>[[:print:][:space:]]+</Title>")
+titles <- str_extract(pub_char_list, "<ArticleTitle>[[:print:][:space:]]+</ArticleTitle>")
 titles <- str_remove_all(titles, "</?[[:alnum:]- =\"]+>")
 ```
 
