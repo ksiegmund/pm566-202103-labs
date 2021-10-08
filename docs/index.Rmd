@@ -1,0 +1,52 @@
+---
+title: "lab 7"
+author: "ks"
+date: "10/08/2021"
+#output: github_document
+output: html_document
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(repos = c(CRAN = "http://cran.rstudio.com"))
+```
+
+## Lab week 7 
+
+```{r install-libraries}
+library(data.table)
+library(tidyverse)
+```
+
+
+```{r get-data, cache=TRUE}
+fn <- "~kims/GitHub/pm566-202103-labs/lab06/mtsamples.csv"
+if (!file.exists(fn))
+  download.file(
+    url = "https://raw.githubusercontent.com/USCbiostats/data-science-data/master/00_mtsamples/mtsamples.csv",
+    destfile = fn)
+mtsamples <- read_csv(fn)
+#mtsamples <- as_tibble(fn)
+```
+
+Read in Medical Transcriptions
+Loading in reference transcription samples from https://www.mtsamples.com/
+
+```{r sum-mat}
+dim(mtsamples)
+colnames(mtsamples)
+```
+
+
+
+
+Knit the document, commit your changes, and Save it on GitHub. 
+
+git commit -a -m "Finalizing lab 6 https://github.com/USCbiostats/PM566/issues/43"
+
+
+```{r sI}
+sessionInfo()
+```
+
