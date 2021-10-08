@@ -2,16 +2,18 @@
 title: "lab 7"
 author: "ks"
 date: "10/08/2021"
-#output: github_document
-output: html_document
+output:
+  github_document: 
+    html_preview: false
+  html_document: default
 always_allow_html: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 library(tidyverse)
-library(tidytext)
+library(stringr)
 ```
 
 ## Lab week 7 
@@ -44,13 +46,193 @@ stringr::str_extract(counts, "[0-9,]+")
 stringr::str_extract(counts, "[[:digit:],]+")
 ```
 
+### Question 2: Academic publications on COVID19 and Hawaii
 
+You need to query the following The parameters passed to the query are documented here.
+
+Use the function httr::GET() to make the following query:
+
+Baseline URL: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi
+
+Query parameters:  
+
+db: pubmed  
+term: covid19 hawaii  
+retmax: 1000
+
+```{r}
+library(httr)
+query_ids <- GET(
+  url   = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi",
+  query = list(     db = "pubmed",
+                  term = "covid19 hawaii",
+                retmax = 1000)
+)
+
+# Extracting the content of the response of GET
+ids <- httr::content(query_ids)
+```
+
+Status: 200 means it succeeded.
+
+```{r}
+query_ids
+```
+
+
+The query will return an XML object, we can turn it into a character list to analyze the text directly with as.character(). Another way of processing the data could be using lists with the function xml2::as_list(). We will skip the latter for now.
+
+Take a look at the data, and continue with the next question (don’t forget to commit and push your results to your GitHub repo!).
+
+```{r}
+#ids_list <- xml2::as_list(ids)
+```
+
+
+### Question 3: Get details about the articles
+
+
+The Ids are wrapped around text in the following way: <Id>... id number ...</Id>. we can use a regular expression that extract that information. Fill out the following lines of code:
+
+```{r}
+# Turn the result into a character vector
+ids <- as.character(ids)
+
+# Find all the ids 
+ids <- stringr::str_extract_all(ids, "<Id>[[:digit:]]+</Id>")[[1]]
+
+# Remove all the leading and trailing <Id> </Id>. Make use of "|"
+ids <- stringr::str_remove_all(ids, "<Id>|</Id>")
+head(ids)
+```
+
+With the ids in hand, we can now try to get the abstracts of the papers. As before, we will need to coerce the contents (results) to a list using:
+
+Baseline url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi
+
+Query parameters:  
+
+db: pubmed  
+id: A character with all the ids separated by comma, e.g., “1232131,546464,13131”  
+retmax: 1000  
+rettype: abstract  
+
+Pro-tip: If you want GET() to take some element literal, wrap it around I() (as you would do in a formula in R). For example, the text "123,456" is replaced with "123%2C456". If you don’t want that behavior, you would need to do the following I("123,456").
+
+```{r retrieving-papers}
+query_pubs <- GET(
+  url   = "https://eutils.ncbi.nlm.nih.gov/",
+  path = "entrez/eutils/efetch.fcgi",
+  query = list(     db = "pubmed",
+                    id = I(paste(ids,collapse=",")),
+                retmax = 1000,
+                rettype= "abstract")
+)
+query_pubs
+```
+
+```{r}
+# Extracting the content of the response of GET
+pubs <- httr::content(query_pubs)
+pubs_txt <- as.character(pubs)
+```
+
+
+## Question 4: Distribution of universities, schools, and departments
+Using the function stringr::str_extract_all() applied on publications_txt, capture all the terms of the form:
+
+University of …
+… Institute of …
+Write a regular expression that captures all such instances
+
+The dash gets any names with dash in them.
+```{r}
+institution <- str_extract_all(
+  str_to_lower(pubs_txt),
+  "university\\s+of\\s+(southern|new|northern|the|hong)?\\s*[[:alpha:]-]+|[[:alpha:]-]+\\s+institute\\s+of\\s+(southern|new|northern|the|marine)?\\s*[[:alpha:]-]+"
+  ) 
+```
+
+```{r }
+institution <- unlist(institution)
+table(institution)
+```
+
+Repeat the exercise and this time focus on schools and departments in the form of
+
+School of …
+Department of …
+And tabulate the results
+
+```{r}
+#schools_and_deps <- str_extract_all(
+#  abstracts_txt,
+#  "[YOUR REGULAR EXPRESSION HERE]"
+#  )
+#table(schools_and_deps)
+```
+
+## Question 5: Form a database
+We want to build a dataset which includes the title and the abstract of the paper. The title of all records is enclosed by the HTML tag ArticleTitle, and the abstract by Abstract.
+
+Before applying the functions to extract text directly, it will help to process the XML a bit. We will use the xml2::xml_children() function to keep one element per id. This way, if a paper is missing the abstract, or something else, we will be able to properly match PUBMED IDS with their corresponding records.
+
+```{r}
+pub_char_list <- xml2::xml_children(pubs)
+pub_char_list <- sapply(pub_char_list, as.character)
+```
+
+```{r}
+#cat(pub_char_list[1])
+```
+
+
+Now, extract the abstract and article title for each one of the elements of pub_char_list. You can either use sapply() as we just did, or simply take advantage of vectorization of stringr::str_extract
+
+```{r}
+abstracts <- str_extract(pub_char_list, "<Abstract>[[:print:][:space:]]+</Abstract>")
+View(cbind(abstracts))
+```
+```{r}
+abstracts <- str_remove_all(abstracts, "</?[[:alnum:]-=\"]+>")
+abstracts <- str_replace_all(abstracts, "[[:space:]]+"," ")
+```
+
+How many of these don’t have an abstract? Now, the title
+
+```{r}
+titles <- str_extract(pub_char_list, "<Title>[[:print:][:space:]]+</Title>")
+titles <- str_remove_all(titles, "</?[[:alnum:]- =\"]+>")
+```
+
+Finally, put everything together into a single data.frame and use knitr::kable to print the results
+
+```{r}
+database <- data.frame(
+  PubMedId = ids,
+  Title    = titles,
+  Abstract = abstracts
+)
+knitr::kable(database[1:20,], caption = "Some papers about Covid19 and Hawaii")
+```
+
+Done! Knit the document, commit, and push.
+
+Final Pro Tip (optional)
+You can still share the HTML document on github. You can include a link in your README.md file as the following:
+
+```{r}
+#View [here](https://ghcdn.rawgit.org/:user/:repo/:tag/:file)
+```
+
+For example, if we wanted to add a direct link the HTML page of lecture 7, we could do something like the following:
+
+View [here](https://ghcdn.rawgit.org/USCbiostats/PM566/master/website/static/slides/07-apis-regex/slides.html) 
 
 
 
 Knit the document, commit your changes, and Save it on GitHub. 
-
-git commit -a -m "Finalizing lab 7 https://github.com/USCbiostats/PM566/issues/43"
+git commit -a -m "Finalizing lab 7 https://github.com/USCbiostats/PM566/issues/44"
 
 
 ```{r sI}
