@@ -119,270 +119,913 @@ SQL references:
 Retrive the actor ID, first name and last name for all actors using the
 actor table. Sort by last name and then by first name.
 
+Using LIMIT n, we can print just the first n entries.
+
 ``` r
 dbGetQuery(con, " 
 SELECT actor_id, first_name, last_name
 FROM actor
-ORDER by last_name, first_name")
+ORDER by last_name, first_name
+LIMIT 6")
 ```
 
-    ##     actor_id  first_name    last_name
-    ## 1         58   CHRISTIAN       AKROYD
-    ## 2        182      DEBBIE       AKROYD
-    ## 3         92     KIRSTEN       AKROYD
-    ## 4        118        CUBA        ALLEN
-    ## 5        145         KIM        ALLEN
-    ## 6        194       MERYL        ALLEN
-    ## 7         76    ANGELINA      ASTAIRE
-    ## 8        112     RUSSELL       BACALL
-    ## 9        190      AUDREY       BAILEY
-    ## 10        67     JESSICA       BAILEY
-    ## 11       115    HARRISON         BALE
-    ## 12       187       RENEE         BALL
-    ## 13        47       JULIA    BARRYMORE
-    ## 14       158      VIVIEN     BASINGER
-    ## 15       174     MICHAEL       BENING
-    ## 16       124    SCARLETT       BENING
-    ## 17        14      VIVIEN       BERGEN
-    ## 18       121        LIZA      BERGMAN
-    ## 19        91 CHRISTOPHER        BERRY
-    ## 20        60       HENRY        BERRY
-    ## 21        12        KARL        BERRY
-    ## 22       189        CUBA        BIRCH
-    ## 23        25       KEVIN        BLOOM
-    ## 24       185     MICHAEL       BOLGER
-    ## 25        37         VAL       BOLGER
-    ## 26        98       CHRIS      BRIDGES
-    ## 27        39      GOLDIE        BRODY
-    ## 28       159       LAURA        BRODY
-    ## 29       167    LAURENCE      BULLOCK
-    ## 30        40      JOHNNY         CAGE
-    ## 31        11        ZERO         CAGE
-    ## 32       181     MATTHEW       CARREY
-    ## 33        86        GREG      CHAPLIN
-    ## 34         3          ED        CHASE
-    ## 35       176         JON        CHASE
-    ## 36       183     RUSSELL        CLOSE
-    ## 37        16        FRED      COSTNER
-    ## 38       129       DARYL     CRAWFORD
-    ## 39        26         RIP     CRAWFORD
-    ## 40        49        ANNE       CRONYN
-    ## 41       104    PENELOPE       CRONYN
-    ## 42       105      SIDNEY        CROWE
-    ## 43        57        JUDE       CRUISE
-    ## 44       201         TOM       CRUISE
-    ## 45       203         TOM       CRUISE
-    ## 46       205         TOM       CRUISE
-    ## 47       207         TOM       CRUISE
-    ## 48        80       RALPH         CRUZ
-    ## 49        81    SCARLETT        DAMON
-    ## 50         4    JENNIFER        DAVIS
-    ## 51       101       SUSAN        DAVIS
-    ## 52       110       SUSAN        DAVIS
-    ## 53        48     FRANCES    DAY-LEWIS
-    ## 54        35        JUDY         DEAN
-    ## 55       143       RIVER         DEAN
-    ## 56       148       EMILY          DEE
-    ## 57       138     LUCILLE          DEE
-    ## 58       107        GINA    DEGENERES
-    ## 59        41       JODIE    DEGENERES
-    ## 60       166        NICK    DEGENERES
-    ## 61        89    CHARLIZE        DENCH
-    ## 62       123    JULIANNE        DENCH
-    ## 63       160       CHRIS         DEPP
-    ## 64       100     SPENCER         DEPP
-    ## 65       109   SYLVESTER         DERN
-    ## 66       173        ALAN     DREYFUSS
-    ## 67        36        BURT      DUKAKIS
-    ## 68       188        ROCK      DUKAKIS
-    ## 69       106     GROUCHO        DUNST
-    ## 70        19         BOB      FAWCETT
-    ## 71       199       JULIA      FAWCETT
-    ## 72        10   CHRISTIAN        GABLE
-    ## 73       165          AL      GARLAND
-    ## 74       184    HUMPHREY      GARLAND
-    ## 75       127       KEVIN      GARLAND
-    ## 76       154       MERYL       GIBSON
-    ## 77        46      PARKER     GOLDBERG
-    ## 78       139        EWAN      GOODING
-    ## 79       191     GREGORY      GOODING
-    ## 80        71        ADAM        GRANT
-    ## 81       179          ED      GUINESS
-    ## 82         1    PENELOPE      GUINESS
-    ## 83        90        SEAN      GUINESS
-    ## 84        32         TIM      HACKMAN
-    ## 85       175     WILLIAM      HACKMAN
-    ## 86       202         TOM        HANKS
-    ## 87       204         TOM        HANKS
-    ## 88       206         TOM        HANKS
-    ## 89       208         TOM        HANKS
-    ## 90       152         BEN       HARRIS
-    ## 91       141        CATE       HARRIS
-    ## 92        56         DAN       HARRIS
-    ## 93        97         MEG        HAWKE
-    ## 94       151    GEOFFREY       HESTON
-    ## 95       169     KENNETH      HOFFMAN
-    ## 96        79         MAE      HOFFMAN
-    ## 97        28       WOODY      HOFFMAN
-    ## 98       161      HARVEY         HOPE
-    ## 99       134        GENE      HOPKINS
-    ## 100      113      MORGAN      HOPKINS
-    ## 101       50     NATALIE      HOPKINS
-    ## 102      132        ADAM       HOPPER
-    ## 103      170        MENA       HOPPER
-    ## 104       65      ANGELA       HUDSON
-    ## 105       52      CARMEN         HUNT
-    ## 106      140      WHOOPI         HURT
-    ## 107      131        JANE      JACKMAN
-    ## 108      119      WARREN      JACKMAN
-    ## 109      146      ALBERT    JOHANSSON
-    ## 110        8     MATTHEW    JOHANSSON
-    ## 111       64         RAY    JOHANSSON
-    ## 112       82       WOODY        JOLIE
-    ## 113       43        KIRK     JOVOVICH
-    ## 114      130       GRETA       KEITEL
-    ## 115      198        MARY       KEITEL
-    ## 116       74       MILLA       KEITEL
-    ## 117       55         FAY       KILMER
-    ## 118      153      MINNIE       KILMER
-    ## 119      162       OPRAH       KILMER
-    ## 120       45       REESE       KILMER
-    ## 121       23      SANDRA       KILMER
-    ## 122      103     MATTHEW        LEIGH
-    ## 123        5      JOHNNY LOLLOBRIGIDA
-    ## 124      157       GRETA       MALDEN
-    ## 125      136          ED    MANSFIELD
-    ## 126       22       ELVIS         MARX
-    ## 127       77        CARY  MCCONAUGHEY
-    ## 128       70    MICHELLE  MCCONAUGHEY
-    ## 129      114      MORGAN    MCDORMAND
-    ## 130      177        GENE     MCKELLEN
-    ## 131       38         TOM     MCKELLEN
-    ## 132      128        CATE      MCQUEEN
-    ## 133       27       JULIA      MCQUEEN
-    ## 134       42         TOM      MIRANDA
-    ## 135      178        LISA       MONROE
-    ## 136      120    PENELOPE       MONROE
-    ## 137        7       GRACE       MOSTEL
-    ## 138       99         JIM       MOSTEL
-    ## 139       61   CHRISTIAN       NEESON
-    ## 140       62       JAYNE       NEESON
-    ## 141        6       BETTE    NICHOLSON
-    ## 142      125      ALBERT        NOLTE
-    ## 143      150       JAYNE        NOLTE
-    ## 144      122       SALMA        NOLTE
-    ## 145      108      WARREN        NOLTE
-    ## 146       34      AUDREY      OLIVIER
-    ## 147       15        CUBA      OLIVIER
-    ## 148       69     KENNETH      PALTROW
-    ## 149       21     KIRSTEN      PALTROW
-    ## 150       33       MILLA         PECK
-    ## 151       30      SANDRA         PECK
-    ## 152       87     SPENCER         PECK
-    ## 153       73        GARY         PENN
-    ## 154      133     RICHARD         PENN
-    ## 155       88     KENNETH        PESCI
-    ## 156      171     OLYMPIA     PFEIFFER
-    ## 157       51        GARY      PHOENIX
-    ## 158       54    PENELOPE      PINKETT
-    ## 159       84       JAMES         PITT
-    ## 160       75        BURT        POSEY
-    ## 161       93       ELLEN      PRESLEY
-    ## 162      135        RITA     REYNOLDS
-    ## 163      142        JADA        RYDER
-    ## 164      195       JAYNE  SILVERSTONE
-    ## 165      180        JEFF  SILVERSTONE
-    ## 166       78     GROUCHO      SINATRA
-    ## 167       31       SISSY     SOBIESKI
-    ## 168       44        NICK     STALLONE
-    ## 169       24     CAMERON       STREEP
-    ## 170      116         DAN       STREEP
-    ## 171      192        JOHN       SUVARI
-    ## 172        9         JOE        SWANK
-    ## 173      155         IAN        TANDY
-    ## 174       66        MARY        TANDY
-    ## 175       59      DUSTIN       TAUTOU
-    ## 176      193        BURT       TEMPLE
-    ## 177       53        MENA       TEMPLE
-    ## 178      149     RUSSELL       TEMPLE
-    ## 179      200       THORA       TEMPLE
-    ## 180      126     FRANCES        TOMEI
-    ## 181       18         DAN         TORN
-    ## 182       94     KENNETH         TORN
-    ## 183      102      WALTER         TORN
-    ## 184       20     LUCILLE        TRACY
-    ## 185      117       RENEE        TRACY
-    ## 186       17       HELEN       VOIGHT
-    ## 187       95       DARYL     WAHLBERG
-    ## 188        2        NICK     WAHLBERG
-    ## 189      196        BELA       WALKEN
-    ## 190       29        ALEC        WAYNE
-    ## 191      163 CHRISTOPHER         WEST
-    ## 192      197       REESE         WEST
-    ## 193      172     GROUCHO     WILLIAMS
-    ## 194      137      MORGAN     WILLIAMS
-    ## 195       72        SEAN     WILLIAMS
-    ## 196       83         BEN       WILLIS
-    ## 197       96        GENE       WILLIS
-    ## 198      164    HUMPHREY       WILLIS
-    ## 199      168        WILL       WILSON
-    ## 200      147         FAY      WINSLET
-    ## 201       68         RIP      WINSLET
-    ## 202      144      ANGELA  WITHERSPOON
-    ## 203      156         FAY         WOOD
-    ## 204       13         UMA         WOOD
-    ## 205       63     CAMERON         WRAY
-    ## 206      111     CAMERON    ZELLWEGER
-    ## 207      186       JULIA    ZELLWEGER
-    ## 208       85      MINNIE    ZELLWEGER
+    ##   actor_id first_name last_name
+    ## 1       58  CHRISTIAN    AKROYD
+    ## 2      182     DEBBIE    AKROYD
+    ## 3       92    KIRSTEN    AKROYD
+    ## 4      118       CUBA     ALLEN
+    ## 5      145        KIM     ALLEN
+    ## 6      194      MERYL     ALLEN
 
 ## Exercise 2
 
 Retrive the actor ID, first name, and last name for actors whose last
 name equals ‘WILLIAMS’ or ‘DAVIS’.
 
-SELECT FROM WHERE \_\_\_ IN (‘WILLIAMS’, ‘DAVIS’) Exercise 3 Write a
-query against the rental table that returns the IDs of the customers who
-rented a film on July 5, 2005 (use the rental.rental\_date column, and
-you can use the date() function to ignore the time component). Include a
-single row for each distinct customer ID.
+``` r
+dbGetQuery(con, " 
+SELECT actor_id, first_name, last_name
+FROM actor
+WHERE last_name IN ('WILLIAMS', 'DAVIS')
+")
+```
 
-SELECT DISTINCT FROM WHERE date(\_\_\_) = ‘2005-07-05’ Exercise 4
-Exercise 4.1 Construct a query that retrives all rows from the payment
-table where the amount is either 1.99, 7.99, 9.99.
+    ##   actor_id first_name last_name
+    ## 1        4   JENNIFER     DAVIS
+    ## 2       72       SEAN  WILLIAMS
+    ## 3      101      SUSAN     DAVIS
+    ## 4      110      SUSAN     DAVIS
+    ## 5      137     MORGAN  WILLIAMS
+    ## 6      172    GROUCHO  WILLIAMS
 
-SELECT \* FROM *** WHERE *** IN (1.99, 7.99, 9.99) Exercise 4.2
-Construct a query that retrives all rows from the payment table where
+This also works:
+
+``` r
+dbGetQuery(con, " 
+SELECT actor_id, first_name, last_name
+FROM actor
+WHERE last_name='WILLIAMS' OR last_name='DAVIS'
+")
+```
+
+    ##   actor_id first_name last_name
+    ## 1        4   JENNIFER     DAVIS
+    ## 2       72       SEAN  WILLIAMS
+    ## 3      101      SUSAN     DAVIS
+    ## 4      110      SUSAN     DAVIS
+    ## 5      137     MORGAN  WILLIAMS
+    ## 6      172    GROUCHO  WILLIAMS
+
+## Exercise 3
+
+Write a query against the rental table that returns the IDs of the
+customers who rented a film on July 5, 2005 (use the rental.rental\_date
+column, and you can use the date() function to ignore the time
+component). Include a single row for each distinct customer ID.
+
+``` r
+dbGetQuery(con, "PRAGMA table_info(rental)")
+```
+
+    ##   cid         name    type notnull dflt_value pk
+    ## 1   0    rental_id INTEGER       0         NA  0
+    ## 2   1  rental_date    TEXT       0         NA  0
+    ## 3   2 inventory_id INTEGER       0         NA  0
+    ## 4   3  customer_id INTEGER       0         NA  0
+    ## 5   4  return_date    TEXT       0         NA  0
+    ## 6   5     staff_id INTEGER       0         NA  0
+    ## 7   6  last_update    TEXT       0         NA  0
+
+``` r
+dbGetQuery(con, " 
+SELECT DISTINCT customer_id 
+FROM  rental
+WHERE date(rental_date) = '2005-07-05'
+LIMIT 6")
+```
+
+    ##   customer_id
+    ## 1         565
+    ## 2         242
+    ## 3          37
+    ## 4          60
+    ## 5         594
+    ## 6           8
+
+## Exercise 4
+
+### Exercise 4.1
+
+Construct a query that retrieves all rows from the payment table where
+the amount is either 1.99, 7.99, 9.99.
+
+``` r
+dbGetQuery(con, "PRAGMA table_info(payment)")
+```
+
+    ##   cid         name    type notnull dflt_value pk
+    ## 1   0   payment_id INTEGER       0         NA  0
+    ## 2   1  customer_id INTEGER       0         NA  0
+    ## 3   2     staff_id INTEGER       0         NA  0
+    ## 4   3    rental_id INTEGER       0         NA  0
+    ## 5   4       amount    REAL       0         NA  0
+    ## 6   5 payment_date    TEXT       0         NA  0
+
+If you have a really big dataset you may want to do it this way:
+
+``` r
+qq<- dbSendQuery(con, " 
+SELECT *
+FROM payment
+WHERE amount IN (1.99, 7.99, 9.99)
+")
+dbFetch(qq,n=10)
+```
+
+    ##    payment_id customer_id staff_id rental_id amount               payment_date
+    ## 1       16050         269        2         7   1.99 2007-01-24 21:40:19.996577
+    ## 2       16056         270        1       193   1.99 2007-01-26 05:10:14.996577
+    ## 3       16081         282        2        48   1.99 2007-01-25 04:49:12.996577
+    ## 4       16103         294        1       595   1.99 2007-01-28 12:28:20.996577
+    ## 5       16133         307        1       614   1.99 2007-01-28 14:01:54.996577
+    ## 6       16158         316        1      1065   1.99 2007-01-31 07:23:22.996577
+    ## 7       16160         318        1       224   9.99 2007-01-26 08:46:53.996577
+    ## 8       16161         319        1        15   9.99 2007-01-24 23:07:48.996577
+    ## 9       16180         330        2       967   7.99 2007-01-30 17:40:32.996577
+    ## 10      16206         351        1      1137   1.99 2007-01-31 17:48:40.996577
+
+Now we can grap the next 10 and then close
+
+``` r
+dbFetch(qq,n=10)
+```
+
+    ##    payment_id customer_id staff_id rental_id amount               payment_date
+    ## 1       16210         354        2       158   1.99 2007-01-25 23:55:37.996577
+    ## 2       16240         369        2       913   7.99 2007-01-30 09:33:24.996577
+    ## 3       16275         386        1       583   7.99 2007-01-28 10:17:21.996577
+    ## 4       16277         387        1       697   7.99 2007-01-29 00:32:30.996577
+    ## 5       16289         391        1       891   7.99 2007-01-30 06:11:38.996577
+    ## 6       16302         400        2       516   1.99 2007-01-28 01:40:13.996577
+    ## 7       16306         401        2       811   1.99 2007-01-29 17:59:08.996577
+    ## 8       16307         402        2       801   1.99 2007-01-29 16:04:16.996577
+    ## 9       16314         407        1       619   7.99 2007-01-28 14:20:52.996577
+    ## 10      16320         411        2       972   1.99 2007-01-30 18:49:33.996577
+
+``` r
+dbClearResult(qq)
+```
+
+### Exercise 4.2
+
+Construct a query that retrieves all rows from the payment table where
 the amount is greater then 5
 
-SELECT \* FROM WHERE Exercise 4.2 Construct a query that retrives all
-rows from the payment table where the amount is greater then 5 and less
-then 8
+``` r
+dbGetQuery(con, " 
+SELECT *
+FROM payment
+WHERE amount > 5
+LIMIT 10
+")
+```
 
-SELECT \* FROM *** WHERE *** AND \_\_\_ Exercise 5 Retrive all the
-payment IDs and their amount from the customers whose last name is
-‘DAVIS’.
+    ##    payment_id customer_id staff_id rental_id amount               payment_date
+    ## 1       16052         269        2       678   6.99 2007-01-28 21:44:14.996577
+    ## 2       16058         271        1      1096   8.99 2007-01-31 11:59:15.996577
+    ## 3       16060         272        1       405   6.99 2007-01-27 12:01:05.996577
+    ## 4       16061         272        1      1041   6.99 2007-01-31 04:14:49.996577
+    ## 5       16068         274        1       394   5.99 2007-01-27 09:54:37.996577
+    ## 6       16073         276        1       860  10.99 2007-01-30 01:13:42.996577
+    ## 7       16074         277        2       308   6.99 2007-01-26 20:30:05.996577
+    ## 8       16082         282        2       282   6.99 2007-01-26 17:24:52.996577
+    ## 9       16086         284        1      1145   6.99 2007-01-31 18:42:11.996577
+    ## 10      16087         286        2        81   6.99 2007-01-25 10:43:45.996577
 
-SELECT FROM INNER JOIN WHERE AND Exercise 6 Exercise 6.1 Use COUNT(\*)
-to count the number of rows in rental
+``` r
+dbGetQuery(con, " 
+SELECT staff_id, COUNT(*)
+FROM payment
+/* GROUP BY goes AFTER WHERE*/
+WHERE amount > 5
+GROUP BY staff_id
+")
+```
 
-Exercise 6.2 Use COUNT(\*) and GROUP BY to count the number of rentals
-for each customer\_id
+    ##   staff_id COUNT(*)
+    ## 1        1      151
+    ## 2        2      115
 
-Exercise 6.3 Repeat the previous query and sort by the count in
-descending order
+### Exercise 4.3
 
-Exercise 6.4 Repeat the previous query but use HAVING to only keep the
-groups with 40 or more.
+Construct a query that retrieves all rows from the payment table where
+the amount is greater then 5 and less then 8
 
-Exercise 7 The following query calculates a number of summary statistics
-for the payment table using MAX, MIN, AVG and SUM
+``` r
+dbGetQuery(con, " 
+SELECT *
+FROM payment
+WHERE amount > 5 AND amount < 8
+LIMIT 6")
+```
 
-Exercise 7.1 Modify the above query to do those calculations for each
+    ##   payment_id customer_id staff_id rental_id amount               payment_date
+    ## 1      16052         269        2       678   6.99 2007-01-28 21:44:14.996577
+    ## 2      16060         272        1       405   6.99 2007-01-27 12:01:05.996577
+    ## 3      16061         272        1      1041   6.99 2007-01-31 04:14:49.996577
+    ## 4      16068         274        1       394   5.99 2007-01-27 09:54:37.996577
+    ## 5      16074         277        2       308   6.99 2007-01-26 20:30:05.996577
+    ## 6      16082         282        2       282   6.99 2007-01-26 17:24:52.996577
+
+## Exercise 5
+
+Retrieve all the payment IDs and their amount from the customers whose
+last name is ‘DAVIS’.
+
+``` r
+dbGetQuery(con, " 
+SELECT payment_id, amount 
+FROM customer AS a INNER JOIN payment AS b 
+  ON a.customer_id = b.customer_id
+WHERE last_name IS 'DAVIS'
+")
+```
+
+    ##   payment_id amount
+    ## 1      16685   4.99
+    ## 2      16686   2.99
+    ## 3      16687   0.99
+
+## Exercise 6
+
+### Exercise 6.1
+
+Use COUNT(\*) to count the number of rows in rental
+
+``` r
+dbGetQuery(con,"
+ SELECT COUNT(*)
+ FROM rental
+")
+```
+
+    ##   COUNT(*)
+    ## 1    16044
+
+### Exercise 6.2
+
+Use COUNT(\*) and GROUP BY to count the number of rentals for each
 customer\_id
 
-Exercise 7.2 Modify the above query to only keep the customer\_ids that
-have more then 5 payments
+``` r
+dbGetQuery(con,"
+ SELECT customer_id, COUNT(*) AS  `N Rentals`
+ FROM rental
+ GROUP BY customer_id  LIMIT 6
+")
+```
+
+    ##   customer_id N Rentals
+    ## 1           1        32
+    ## 2           2        27
+    ## 3           3        26
+    ## 4           4        22
+    ## 5           5        38
+    ## 6           6        28
+
+### Exercise 6.3
+
+Repeat the previous query and sort by the count in descending order
+
+``` r
+dbGetQuery(con,"
+ SELECT customer_id, COUNT(*) AS count
+ FROM rental
+ GROUP BY customer_id
+ ORDER BY count DESC
+ LIMIT 6
+ ")
+```
+
+    ##   customer_id count
+    ## 1         148    46
+    ## 2         526    45
+    ## 3         236    42
+    ## 4         144    42
+    ## 5          75    41
+    ## 6         469    40
+
+### Exercise 6.4
+
+Repeat the previous query but use HAVING to only keep the groups with 40
+or more.
+
+``` r
+dbGetQuery(con,"
+ SELECT customer_id, COUNT(*) AS count
+ FROM rental
+ GROUP BY customer_id
+  HAVING count > 40
+  ORDER BY count DESC
+")
+```
+
+    ##   customer_id count
+    ## 1         148    46
+    ## 2         526    45
+    ## 3         236    42
+    ## 4         144    42
+    ## 5          75    41
+
+## Exercise 7
+
+The following query calculates a number of summary statistics for the
+payment table using MAX, MIN, AVG and SUM
+
+``` r
+dbGetQuery(con,"
+ SELECT MAX(amount) AS max,
+        MIN(amount) as min,
+        AVG(amount) AS avg,
+        SUM(amount) AS sum
+ FROM payment
+")
+```
+
+    ##     max  min      avg     sum
+    ## 1 11.99 0.99 4.169775 4824.43
+
+### Exercise 7.1
+
+Modify the above query to do those calculations for each customer\_id
+
+``` r
+dbGetQuery(con,"
+ SELECT customer_id, 
+        MIN(amount) as min,
+        AVG(amount) AS avg,
+        MAX(amount) AS max,
+        SUM(amount) AS sum
+ FROM payment
+ GROUP BY customer_id
+")
+```
+
+    ##     customer_id  min      avg   max   sum
+    ## 1             1 0.99 1.990000  2.99  3.98
+    ## 2             2 4.99 4.990000  4.99  4.99
+    ## 3             3 1.99 2.490000  2.99  4.98
+    ## 4             5 0.99 3.323333  6.99  9.97
+    ## 5             6 0.99 2.990000  4.99  8.97
+    ## 6             7 0.99 4.190000  5.99 20.95
+    ## 7             8 6.99 6.990000  6.99  6.99
+    ## 8             9 0.99 3.656667  4.99 10.97
+    ## 9            10 4.99 4.990000  4.99  4.99
+    ## 10           11 6.99 6.990000  6.99  6.99
+    ## 11           12 4.99 4.990000  4.99  9.98
+    ## 12           14 0.99 4.190000  9.99 20.95
+    ## 13           16 0.99 2.740000  3.99 10.96
+    ## 14           17 2.99 3.656667  4.99 10.97
+    ## 15           18 2.99 4.323333  4.99 12.97
+    ## 16           19 0.99 4.490000  9.99 26.94
+    ## 17           20 1.99 3.990000  6.99 11.97
+    ## 18           21 0.99 2.990000  3.99  8.97
+    ## 19           22 4.99 6.323333  8.99 18.97
+    ## 20           23 0.99 4.323333  8.99 12.97
+    ## 21           24 2.99 4.990000  6.99  9.98
+    ## 22           25 2.99 5.490000  7.99 10.98
+    ## 23           26 2.99 2.990000  2.99  5.98
+    ## 24           27 2.99 2.990000  2.99  2.99
+    ## 25           28 2.99 2.990000  2.99  5.98
+    ## 26           29 1.99 1.990000  1.99  1.99
+    ## 27           32 4.99 4.990000  4.99 14.97
+    ## 28           33 2.99 2.990000  2.99  2.99
+    ## 29           35 3.99 5.490000  6.99 10.98
+    ## 30           36 0.99 0.990000  0.99  1.98
+    ## 31           37 0.99 1.990000  2.99  3.98
+    ## 32           40 4.99 4.990000  4.99  4.99
+    ## 33           42 5.99 5.990000  5.99  5.99
+    ## 34           43 4.99 4.990000  4.99  9.98
+    ## 35           44 0.99 2.590000  4.99 12.95
+    ## 36           45 2.99 2.990000  2.99  2.99
+    ## 37           46 2.99 3.656667  4.99 10.97
+    ## 38           47 3.99 5.323333  6.99 15.97
+    ## 39           48 0.99 2.990000  4.99  8.97
+    ## 40           49 1.99 3.490000  4.99 13.96
+    ## 41           50 4.99 4.990000  4.99 24.95
+    ## 42           51 4.99 4.990000  4.99 14.97
+    ## 43           52 0.99 0.990000  0.99  0.99
+    ## 44           53 0.99 4.490000  9.99 26.94
+    ## 45           54 3.99 4.656667  4.99 13.97
+    ## 46           55 0.99 5.323333  9.99 15.97
+    ## 47           56 2.99 4.990000  6.99 19.96
+    ## 48           57 4.99 7.490000  9.99 14.98
+    ## 49           58 0.99 3.323333  7.99  9.97
+    ## 50           59 2.99 4.656667  5.99 13.97
+    ## 51           60 1.99 3.323333  4.99  9.97
+    ## 52           61 0.99 0.990000  0.99  0.99
+    ## 53           62 0.99 2.990000  4.99  5.98
+    ## 54           64 0.99 2.990000  4.99  8.97
+    ## 55           65 0.99 2.990000  4.99  5.98
+    ## 56           66 4.99 4.990000  4.99  4.99
+    ## 57           67 2.99 6.490000  9.99 12.98
+    ## 58           69 1.99 3.490000  4.99  6.98
+    ## 59           70 4.99 4.990000  4.99  4.99
+    ## 60           71 2.99 6.490000  9.99 12.98
+    ## 61           72 0.99 3.656667  4.99 10.97
+    ## 62           73 2.99 3.990000  4.99  7.98
+    ## 63           74 6.99 6.990000  6.99  6.99
+    ## 64           75 0.99 2.990000  4.99  5.98
+    ## 65           76 0.99 1.490000  1.99  2.98
+    ## 66           77 0.99 2.990000  5.99 14.95
+    ## 67           79 2.99 3.656667  4.99 10.97
+    ## 68           81 0.99 0.990000  0.99  0.99
+    ## 69           82 2.99 5.990000  8.99 11.98
+    ## 70           83 0.99 1.656667  2.99  4.97
+    ## 71           84 0.99 4.323333  6.99 12.97
+    ## 72           85 4.99 7.490000  9.99 14.98
+    ## 73           86 1.99 1.990000  1.99  1.99
+    ## 74           87 2.99 3.990000  4.99  7.98
+    ## 75           88 2.99 2.990000  2.99  2.99
+    ## 76           89 0.99 3.323333  5.99  9.97
+    ## 77           91 5.99 5.990000  5.99  5.99
+    ## 78           92 4.99 5.490000  5.99 10.98
+    ## 79           93 2.99 4.990000  6.99 14.97
+    ## 80           94 2.99 3.990000  4.99  7.98
+    ## 81           95 4.99 4.990000  4.99  4.99
+    ## 82           98 3.99 3.990000  3.99  3.99
+    ## 83           99 0.99 0.990000  0.99  0.99
+    ## 84          100 0.99 0.990000  0.99  0.99
+    ## 85          101 9.99 9.990000  9.99  9.99
+    ## 86          102 0.99 2.656667  4.99  7.97
+    ## 87          103 7.99 8.990000  9.99 17.98
+    ## 88          104 3.99 7.490000 10.99 14.98
+    ## 89          105 2.99 6.740000  8.99 26.96
+    ## 90          106 0.99 2.490000  3.99  4.98
+    ## 91          107 5.99 5.990000  5.99 11.98
+    ## 92          108 0.99 2.990000  4.99  5.98
+    ## 93          109 0.99 3.990000  7.99 27.93
+    ## 94          110 1.99 4.990000  7.99  9.98
+    ## 95          111 2.99 2.990000  2.99  2.99
+    ## 96          112 0.99 1.990000  2.99  3.98
+    ## 97          113 0.99 0.990000  0.99  1.98
+    ## 98          114 2.99 4.323333  4.99 12.97
+    ## 99          115 0.99 1.656667  2.99  4.97
+    ## 100         116 4.99 4.990000  4.99  4.99
+    ## 101         117 0.99 0.990000  0.99  1.98
+    ## 102         118 5.99 5.990000  5.99  5.99
+    ## 103         119 0.99 4.656667  6.99 13.97
+    ## 104         120 0.99 4.490000  7.99  8.98
+    ## 105         121 4.99 4.990000  4.99  4.99
+    ## 106         122 0.99 2.990000  4.99  5.98
+    ## 107         123 2.99 2.990000  2.99  2.99
+    ## 108         124 0.99 3.990000  5.99 15.96
+    ## 109         125 3.99 3.990000  3.99  3.99
+    ## 110         126 4.99 4.990000  4.99 14.97
+    ## 111         127 0.99 0.990000  0.99  1.98
+    ## 112         128 2.99 4.490000  5.99  8.98
+    ## 113         130 2.99 2.990000  2.99  5.98
+    ## 114         131 2.99 5.323333  7.99 15.97
+    ## 115         133 2.99 4.990000  6.99  9.98
+    ## 116         134 0.99 4.240000  6.99 16.96
+    ## 117         135 3.99 4.990000  5.99  9.98
+    ## 118         136 2.99 2.990000  2.99  2.99
+    ## 119         137 2.99 2.990000  2.99  2.99
+    ## 120         138 0.99 1.990000  2.99  3.98
+    ## 121         141 2.99 2.990000  2.99  2.99
+    ## 122         142 0.99 6.656667  9.99 19.97
+    ## 123         143 2.99 2.990000  2.99  5.98
+    ## 124         144 2.99 2.990000  2.99  5.98
+    ## 125         145 0.99 0.990000  0.99  0.99
+    ## 126         146 4.99 6.490000  7.99 12.98
+    ## 127         147 0.99 0.990000  0.99  1.98
+    ## 128         148 4.99 4.990000  4.99  4.99
+    ## 129         149 4.99 4.990000  4.99  4.99
+    ## 130         150 2.99 3.656667  3.99 10.97
+    ## 131         151 4.99 5.490000  5.99 10.98
+    ## 132         152 4.99 4.990000  4.99  9.98
+    ## 133         154 5.99 6.656667  7.99 19.97
+    ## 134         155 2.99 2.990000  2.99  2.99
+    ## 135         156 4.99 5.990000  6.99 11.98
+    ## 136         157 0.99 2.990000  4.99  5.98
+    ## 137         158 4.99 5.490000  5.99 10.98
+    ## 138         159 0.99 2.490000  3.99  9.96
+    ## 139         161 0.99 2.990000  5.99 17.94
+    ## 140         162 1.99 3.990000  4.99 11.97
+    ## 141         164 1.99 1.990000  1.99  1.99
+    ## 142         165 4.99 4.990000  4.99  4.99
+    ## 143         166 1.99 1.990000  1.99  1.99
+    ## 144         167 2.99 3.656667  4.99 10.97
+    ## 145         168 0.99 2.990000  4.99  5.98
+    ## 146         169 3.99 4.490000  4.99  8.98
+    ## 147         170 0.99 3.323333  5.99  9.97
+    ## 148         171 9.99 9.990000  9.99  9.99
+    ## 149         172 0.99 3.990000  6.99 11.97
+    ## 150         173 2.99 3.990000  4.99  7.98
+    ## 151         174 4.99 5.490000  5.99 10.98
+    ## 152         176 0.99 4.390000  7.99 21.95
+    ## 153         179 0.99 4.323333  6.99 12.97
+    ## 154         180 2.99 2.990000  2.99  2.99
+    ## 155         181 6.99 6.990000  6.99  6.99
+    ## 156         182 0.99 2.490000  3.99  4.98
+    ## 157         183 0.99 0.990000  0.99  0.99
+    ## 158         184 1.99 3.323333  4.99  9.97
+    ## 159         185 0.99 1.656667  2.99  4.97
+    ## 160         186 0.99 1.490000  1.99  2.98
+    ## 161         187 7.99 7.990000  7.99  7.99
+    ## 162         189 5.99 5.990000  5.99  5.99
+    ## 163         190 2.99 3.990000  4.99  7.98
+    ## 164         191 2.99 3.990000  4.99  7.98
+    ## 165         192 1.99 1.990000  1.99  1.99
+    ## 166         193 0.99 1.990000  2.99  3.98
+    ## 167         194 4.99 6.490000  7.99 12.98
+    ## 168         196 1.99 5.740000 11.99 22.96
+    ## 169         197 0.99 2.615000  3.99 20.92
+    ## 170         198 0.99 3.390000  4.99 16.95
+    ## 171         199 7.99 7.990000  7.99  7.99
+    ## 172         200 9.99 9.990000  9.99  9.99
+    ## 173         201 3.99 5.656667  6.99 16.97
+    ## 174         203 0.99 0.990000  0.99  0.99
+    ## 175         204 0.99 3.240000  4.99 12.96
+    ## 176         207 0.99 2.990000  6.99 17.94
+    ## 177         208 4.99 4.990000  4.99  4.99
+    ## 178         209 0.99 4.656667  9.99 13.97
+    ## 179         210 2.99 2.990000  2.99  2.99
+    ## 180         211 4.99 4.990000  4.99  4.99
+    ## 181         213 0.99 0.990000  0.99  0.99
+    ## 182         214 0.99 2.590000  3.99 12.95
+    ## 183         215 4.99 4.990000  4.99  9.98
+    ## 184         216 4.99 4.990000  4.99  4.99
+    ## 185         217 2.99 5.990000  8.99 11.98
+    ## 186         219 0.99 0.990000  0.99  0.99
+    ## 187         220 0.99 2.490000  3.99  4.98
+    ## 188         221 4.99 4.990000  4.99  4.99
+    ## 189         222 0.99 3.990000  6.99 19.95
+    ## 190         223 2.99 2.990000  2.99  2.99
+    ## 191         225 3.99 4.490000  4.99  8.98
+    ## 192         227 3.99 4.490000  4.99  8.98
+    ## 193         228 0.99 2.990000  4.99  5.98
+    ## 194         230 0.99 2.990000  4.99  5.98
+    ## 195         231 5.99 7.323333  8.99 21.97
+    ## 196         232 3.99 4.490000  4.99  8.98
+    ## 197         234 4.99 4.990000  4.99  4.99
+    ## 198         235 0.99 1.990000  2.99  3.98
+    ## 199         236 2.99 2.990000  2.99  8.97
+    ## 200         237 0.99 2.990000  4.99  5.98
+    ## 201         238 2.99 3.990000  4.99  7.98
+    ## 202         239 2.99 5.656667  7.99 33.94
+    ## 203         240 2.99 3.656667  4.99 10.97
+    ## 204         241 3.99 5.990000  7.99 11.98
+    ## 205         242 2.99 3.990000  4.99 11.97
+    ## 206         243 4.99 4.990000  4.99  4.99
+    ## 207         244 1.99 3.490000  4.99  6.98
+    ## 208         245 0.99 4.823333  8.99 28.94
+    ## 209         246 3.99 6.190000  8.99 30.95
+    ## 210         247 3.99 5.323333  6.99 15.97
+    ## 211         248 4.99 6.490000  7.99 12.98
+    ## 212         249 2.99 4.740000  6.99 18.96
+    ## 213         250 0.99 3.790000  5.99 18.95
+    ## 214         251 1.99 3.323333  4.99 19.94
+    ## 215         252 0.99 2.990000  4.99  5.98
+    ## 216         253 0.99 3.656667  6.99 10.97
+    ## 217         254 2.99 4.490000  5.99  8.98
+    ## 218         256 0.99 2.990000  4.99 14.95
+    ## 219         257 2.99 2.990000  2.99  8.97
+    ## 220         259 2.99 5.323333  6.99 15.97
+    ## 221         260 8.99 8.990000  8.99  8.99
+    ## 222         261 0.99 4.240000  6.99 16.96
+    ## 223         262 4.99 4.990000  4.99  4.99
+    ## 224         263 0.99 2.990000  4.99  5.98
+    ## 225         265 0.99 0.990000  0.99  0.99
+    ## 226         266 1.99 2.490000  2.99  4.98
+    ## 227         267 4.99 5.656667  6.99 16.97
+    ## 228         269 0.99 3.156667  6.99 18.94
+    ## 229         270 1.99 3.490000  4.99  6.98
+    ## 230         271 8.99 8.990000  8.99  8.99
+    ## 231         272 0.99 3.990000  6.99 15.96
+    ## 232         273 0.99 2.490000  3.99  4.98
+    ## 233         274 2.99 4.156667  5.99 24.94
+    ## 234         275 2.99 2.990000  2.99  2.99
+    ## 235         276 3.99 7.490000 10.99 14.98
+    ## 236         277 6.99 6.990000  6.99  6.99
+    ## 237         278 4.99 4.990000  4.99  4.99
+    ## 238         279 0.99 1.990000  2.99  3.98
+    ## 239         280 4.99 4.990000  4.99  4.99
+    ## 240         281 2.99 2.990000  2.99  5.98
+    ## 241         282 0.99 3.323333  6.99  9.97
+    ## 242         284 0.99 2.990000  6.99  8.97
+    ## 243         286 6.99 6.990000  6.99  6.99
+    ## 244         287 0.99 2.323333  2.99  6.97
+    ## 245         288 3.99 5.490000  6.99 21.96
+    ## 246         290 2.99 2.990000  2.99  2.99
+    ## 247         291 2.99 4.323333  4.99 12.97
+    ## 248         292 0.99 0.990000  0.99  0.99
+    ## 249         293 0.99 4.990000  8.99 14.97
+    ## 250         294 1.99 1.990000  1.99  1.99
+    ## 251         295 3.99 3.990000  3.99  3.99
+    ## 252         296 2.99 4.740000  5.99 18.96
+    ## 253         297 0.99 2.490000  3.99  4.98
+    ## 254         298 3.99 3.990000  3.99  3.99
+    ## 255         299 5.99 7.490000  8.99 14.98
+    ## 256         300 0.99 3.323333  4.99  9.97
+    ## 257         301 0.99 3.990000  5.99 11.97
+    ## 258         302 4.99 5.490000  5.99 10.98
+    ## 259         303 0.99 2.990000  4.99  8.97
+    ## 260         304 0.99 4.990000 10.99 14.97
+    ## 261         305 2.99 2.990000  2.99  2.99
+    ## 262         306 3.99 5.490000  6.99 10.98
+    ## 263         307 1.99 4.740000  6.99 18.96
+    ## 264         308 3.99 3.990000  3.99  3.99
+    ## 265         309 0.99 3.990000  6.99  7.98
+    ## 266         310 0.99 0.990000  0.99  0.99
+    ## 267         311 2.99 5.390000  6.99 26.95
+    ## 268         312 0.99 4.490000  6.99 17.96
+    ## 269         313 0.99 2.490000  4.99  9.96
+    ## 270         314 4.99 5.490000  5.99 10.98
+    ## 271         315 4.99 6.990000  8.99 13.98
+    ## 272         316 1.99 5.323333  8.99 15.97
+    ## 273         317 6.99 6.990000  6.99  6.99
+    ## 274         318 9.99 9.990000  9.99  9.99
+    ## 275         319 2.99 5.656667  9.99 16.97
+    ## 276         321 4.99 5.323333  5.99 15.97
+    ## 277         322 0.99 2.990000  4.99  5.98
+    ## 278         323 2.99 4.656667  5.99 13.97
+    ## 279         324 3.99 3.990000  3.99  3.99
+    ## 280         325 5.99 5.990000  5.99  5.99
+    ## 281         326 3.99 5.323333  6.99 15.97
+    ## 282         327 6.99 6.990000  6.99  6.99
+    ## 283         328 2.99 2.990000  2.99  2.99
+    ## 284         330 3.99 5.990000  7.99 11.98
+    ## 285         331 0.99 1.990000  2.99  3.98
+    ## 286         332 3.99 5.490000  6.99 10.98
+    ## 287         333 4.99 4.990000  4.99  4.99
+    ## 288         334 6.99 7.990000  8.99 15.98
+    ## 289         337 4.99 6.990000  8.99 20.97
+    ## 290         338 0.99 0.990000  0.99  0.99
+    ## 291         339 5.99 5.990000  5.99  5.99
+    ## 292         343 3.99 3.990000  3.99  7.98
+    ## 293         344 2.99 4.490000  5.99  8.98
+    ## 294         345 0.99 0.990000  0.99  1.98
+    ## 295         346 4.99 4.990000  4.99  9.98
+    ## 296         348 0.99 0.990000  0.99  1.98
+    ## 297         349 4.99 4.990000  4.99  4.99
+    ## 298         350 4.99 4.990000  4.99  9.98
+    ## 299         351 1.99 1.990000  1.99  1.99
+    ## 300         352 2.99 2.990000  2.99  2.99
+    ## 301         353 6.99 6.990000  6.99  6.99
+    ## 302         354 0.99 1.323333  1.99  3.97
+    ## 303         355 3.99 3.990000  3.99  3.99
+    ## 304         356 4.99 4.990000  4.99  4.99
+    ## 305         357 0.99 2.990000  4.99  8.97
+    ## 306         358 4.99 4.990000  4.99  4.99
+    ## 307         359 2.99 5.323333  8.99 15.97
+    ## 308         360 0.99 2.990000  4.99  5.98
+    ## 309         361 4.99 5.490000  5.99 10.98
+    ## 310         362 4.99 4.990000  4.99  4.99
+    ## 311         363 3.99 3.990000  3.99  3.99
+    ## 312         364 5.99 5.990000  5.99  5.99
+    ## 313         365 4.99 5.490000  5.99 10.98
+    ## 314         366 6.99 6.990000  6.99  6.99
+    ## 315         367 0.99 1.990000  2.99  3.98
+    ## 316         368 2.99 4.490000  5.99 17.96
+    ## 317         369 0.99 4.740000  7.99 18.96
+    ## 318         371 0.99 4.323333  6.99 25.94
+    ## 319         372 2.99 2.990000  2.99  5.98
+    ## 320         373 4.99 4.990000  4.99  4.99
+    ## 321         374 0.99 1.656667  2.99  4.97
+    ## 322         375 2.99 5.490000  8.99 21.96
+    ## 323         376 0.99 0.990000  0.99  0.99
+    ## 324         378 0.99 0.990000  0.99  0.99
+    ## 325         379 4.99 4.990000  4.99  9.98
+    ## 326         380 3.99 3.990000  3.99  3.99
+    ## 327         381 0.99 2.323333  2.99  6.97
+    ## 328         382 2.99 2.990000  2.99  5.98
+    ## 329         383 0.99 4.990000  8.99  9.98
+    ## 330         384 0.99 2.990000  4.99 11.96
+    ## 331         385 2.99 3.990000  4.99  7.98
+    ## 332         386 7.99 7.990000  7.99  7.99
+    ## 333         387 3.99 5.490000  7.99 21.96
+    ## 334         388 4.99 4.990000  4.99  9.98
+    ## 335         389 4.99 4.990000  4.99  4.99
+    ## 336         390 4.99 4.990000  4.99  9.98
+    ## 337         391 2.99 4.990000  7.99 24.95
+    ## 338         393 0.99 2.990000  4.99  5.98
+    ## 339         394 2.99 3.490000  3.99  6.98
+    ## 340         396 5.99 5.990000  5.99  5.99
+    ## 341         397 0.99 0.990000  0.99  0.99
+    ## 342         398 4.99 4.990000  4.99  4.99
+    ## 343         399 4.99 5.990000  6.99 17.97
+    ## 344         400 1.99 4.740000  6.99 18.96
+    ## 345         401 1.99 3.990000  4.99 11.97
+    ## 346         402 1.99 1.990000  1.99  1.99
+    ## 347         403 0.99 1.990000  2.99  3.98
+    ## 348         404 5.99 5.990000  5.99  5.99
+    ## 349         405 2.99 3.990000  4.99  7.98
+    ## 350         406 0.99 0.990000  0.99  0.99
+    ## 351         407 7.99 7.990000  7.99  7.99
+    ## 352         408 2.99 4.323333  5.99 12.97
+    ## 353         409 6.99 6.990000  6.99  6.99
+    ## 354         411 1.99 3.490000  4.99  6.98
+    ## 355         412 0.99 2.740000  4.99 10.96
+    ## 356         413 4.99 4.990000  4.99  9.98
+    ## 357         414 3.99 4.490000  4.99  8.98
+    ## 358         415 4.99 4.990000  4.99  4.99
+    ## 359         416 0.99 2.656667  3.99  7.97
+    ## 360         417 4.99 6.323333  8.99 18.97
+    ## 361         419 2.99 2.990000  2.99  2.99
+    ## 362         420 4.99 4.990000  4.99  4.99
+    ## 363         421 0.99 0.990000  0.99  1.98
+    ## 364         422 0.99 0.990000  0.99  0.99
+    ## 365         424 0.99 0.990000  0.99  0.99
+    ## 366         425 5.99 5.990000  5.99  5.99
+    ## 367         426 0.99 0.990000  0.99  0.99
+    ## 368         427 6.99 6.990000  6.99  6.99
+    ## 369         428 4.99 4.990000  4.99  4.99
+    ## 370         429 2.99 5.390000  7.99 26.95
+    ## 371         430 2.99 3.990000  4.99  7.98
+    ## 372         431 2.99 2.990000  2.99  2.99
+    ## 373         432 5.99 7.656667  8.99 22.97
+    ## 374         433 8.99 9.990000 10.99 19.98
+    ## 375         434 5.99 5.990000  5.99  5.99
+    ## 376         435 4.99 6.490000  7.99 12.98
+    ## 377         436 3.99 5.990000  7.99 17.97
+    ## 378         437 2.99 4.656667  5.99 13.97
+    ## 379         438 0.99 4.323333  6.99 12.97
+    ## 380         439 0.99 4.656667  9.99 13.97
+    ## 381         440 4.99 4.990000  4.99  4.99
+    ## 382         441 4.99 4.990000  4.99  4.99
+    ## 383         442 0.99 4.656667  6.99 13.97
+    ## 384         443 4.99 4.990000  4.99  4.99
+    ## 385         444 0.99 4.990000  8.99  9.98
+    ## 386         445 2.99 2.990000  2.99  5.98
+    ## 387         446 0.99 2.323333  4.99  6.97
+    ## 388         447 0.99 1.990000  2.99  3.98
+    ## 389         448 2.99 3.990000  4.99  7.98
+    ## 390         449 4.99 6.323333  7.99 18.97
+    ## 391         450 3.99 3.990000  3.99  3.99
+    ## 392         451 0.99 2.323333  2.99  6.97
+    ## 393         452 1.99 2.656667  2.99  7.97
+    ## 394         454 7.99 7.990000  7.99  7.99
+    ## 395         455 0.99 0.990000  0.99  1.98
+    ## 396         456 4.99 4.990000  4.99  4.99
+    ## 397         457 7.99 7.990000  7.99  7.99
+    ## 398         459 2.99 2.990000  2.99  2.99
+    ## 399         460 0.99 2.990000  4.99 11.96
+    ## 400         461 6.99 6.990000  6.99  6.99
+    ## 401         462 2.99 3.490000  3.99  6.98
+    ## 402         463 1.99 1.990000  1.99  1.99
+    ## 403         464 1.99 2.990000  3.99  5.98
+    ## 404         465 0.99 0.990000  0.99  0.99
+    ## 405         466 2.99 2.990000  2.99  2.99
+    ## 406         467 4.99 4.990000  4.99  4.99
+    ## 407         468 0.99 4.190000  6.99 20.95
+    ## 408         469 0.99 3.790000  7.99 18.95
+    ## 409         470 2.99 2.990000  2.99  2.99
+    ## 410         471 2.99 2.990000  2.99  2.99
+    ## 411         472 0.99 2.490000  4.99  9.96
+    ## 412         473 2.99 3.990000  4.99 11.97
+    ## 413         474 7.99 7.990000  7.99  7.99
+    ## 414         475 0.99 2.990000  4.99  5.98
+    ## 415         476 2.99 3.990000  4.99  7.98
+    ## 416         477 2.99 2.990000  2.99  2.99
+    ## 417         479 3.99 5.990000  7.99 11.98
+    ## 418         480 0.99 5.990000  9.99 17.97
+    ## 419         481 5.99 5.990000  5.99  5.99
+    ## 420         482 0.99 4.323333  8.99 12.97
+    ## 421         483 6.99 6.990000  6.99  6.99
+    ## 422         484 2.99 3.656667  4.99 10.97
+    ## 423         485 2.99 2.990000  2.99  2.99
+    ## 424         486 0.99 4.323333  8.99 12.97
+    ## 425         489 2.99 3.990000  4.99  7.98
+    ## 426         490 4.99 5.990000  6.99 11.98
+    ## 427         491 0.99 1.990000  2.99  3.98
+    ## 428         492 2.99 2.990000  2.99  2.99
+    ## 429         493 7.99 7.990000  7.99  7.99
+    ## 430         494 4.99 4.990000  4.99  4.99
+    ## 431         495 4.99 4.990000  4.99  9.98
+    ## 432         496 0.99 2.990000  4.99  5.98
+    ## 433         497 7.99 7.990000  7.99  7.99
+    ## 434         498 2.99 4.990000  8.99 14.97
+    ## 435         499 2.99 2.990000  2.99  2.99
+    ## 436         500 0.99 6.323333  8.99 18.97
+    ## 437         501 0.99 1.490000  1.99  2.98
+    ## 438         502 0.99 1.990000  2.99  7.96
+    ## 439         503 1.99 3.990000  5.99 15.96
+    ## 440         504 4.99 5.323333  5.99 15.97
+    ## 441         505 2.99 2.990000  2.99  5.98
+    ## 442         506 0.99 4.132857  8.99 28.93
+    ## 443         507 0.99 2.990000  4.99  5.98
+    ## 444         508 2.99 2.990000  2.99  5.98
+    ## 445         509 4.99 6.990000  8.99 13.98
+    ## 446         510 4.99 6.656667  8.99 19.97
+    ## 447         511 2.99 3.490000  3.99  6.98
+    ## 448         513 4.99 4.990000  4.99  4.99
+    ## 449         514 4.99 4.990000  4.99  4.99
+    ## 450         515 6.99 7.990000  8.99 15.98
+    ## 451         516 1.99 2.990000  3.99  5.98
+    ## 452         517 4.99 4.990000  4.99  4.99
+    ## 453         518 2.99 2.990000  2.99  2.99
+    ## 454         519 3.99 3.990000  3.99  3.99
+    ## 455         520 6.99 6.990000  6.99  6.99
+    ## 456         522 5.99 5.990000  5.99  5.99
+    ## 457         523 0.99 2.990000  4.99  5.98
+    ## 458         524 0.99 2.990000  4.99  5.98
+    ## 459         525 5.99 5.990000  5.99  5.99
+    ## 460         526 2.99 4.323333  4.99 12.97
+    ## 461         528 0.99 3.590000  5.99 17.95
+    ## 462         529 2.99 2.990000  2.99  2.99
+    ## 463         530 0.99 0.990000  0.99  0.99
+    ## 464         531 2.99 3.990000  4.99  7.98
+    ## 465         532 2.99 2.990000  2.99  2.99
+    ## 466         533 0.99 2.990000  5.99  8.97
+    ## 467         534 0.99 3.490000  5.99  6.98
+    ## 468         535 0.99 3.240000  4.99 12.96
+    ## 469         536 0.99 3.990000  6.99  7.98
+    ## 470         537 4.99 4.990000  4.99  4.99
+    ## 471         538 2.99 3.990000  4.99  7.98
+    ## 472         539 0.99 2.990000  4.99  5.98
+    ## 473         541 4.99 6.490000  7.99 12.98
+    ## 474         542 4.99 4.990000  4.99  9.98
+    ## 475         543 1.99 4.490000  6.99  8.98
+    ## 476         544 2.99 2.990000  2.99  5.98
+    ## 477         545 0.99 2.490000  3.99  4.98
+    ## 478         546 5.99 6.490000  6.99 12.98
+    ## 479         547 0.99 3.990000  8.99 11.97
+    ## 480         548 3.99 5.323333  6.99 15.97
+    ## 481         549 0.99 3.740000  4.99 14.96
+    ## 482         550 7.99 7.990000  7.99  7.99
+    ## 483         551 0.99 4.190000  7.99 20.95
+    ## 484         552 0.99 0.990000  0.99  0.99
+    ## 485         553 4.99 4.990000  4.99  4.99
+    ## 486         554 2.99 2.990000  2.99  5.98
+    ## 487         556 0.99 3.656667  5.99 10.97
+    ## 488         557 4.99 4.990000  4.99  9.98
+    ## 489         560 2.99 2.990000  2.99  2.99
+    ## 490         561 4.99 4.990000  4.99  9.98
+    ## 491         562 2.99 3.990000  5.99 11.97
+    ## 492         563 4.99 5.490000  5.99 10.98
+    ## 493         564 2.99 4.490000  5.99  8.98
+    ## 494         565 0.99 3.990000  6.99  7.98
+    ## 495         566 4.99 5.490000  5.99 10.98
+    ## 496         569 1.99 4.190000  4.99 20.95
+    ## 497         570 7.99 7.990000  7.99  7.99
+    ## 498         571 3.99 6.990000  9.99 13.98
+    ## 499         572 7.99 7.990000  7.99  7.99
+    ## 500         573 2.99 2.990000  2.99  2.99
+    ## 501         574 0.99 0.990000  0.99  0.99
+    ## 502         575 0.99 3.390000  4.99 16.95
+    ## 503         576 0.99 1.990000  2.99  3.98
+    ## 504         577 0.99 3.490000  5.99  6.98
+    ## 505         578 0.99 0.990000  0.99  0.99
+    ## 506         580 0.99 0.990000  0.99  0.99
+    ## 507         581 4.99 4.990000  4.99  9.98
+    ## 508         582 0.99 0.990000  0.99  0.99
+    ## 509         584 4.99 4.990000  4.99 14.97
+    ## 510         586 4.99 6.990000  8.99 13.98
+    ## 511         587 0.99 2.990000  4.99  5.98
+    ## 512         588 2.99 3.990000  4.99  7.98
+    ## 513         589 0.99 3.656667  4.99 10.97
+    ## 514         590 3.99 3.990000  3.99  3.99
+    ## 515         593 2.99 5.990000  8.99 11.98
+    ## 516         594 0.99 5.490000  8.99 21.96
+    ## 517         595 6.99 6.990000  6.99  6.99
+    ## 518         596 0.99 3.823333  6.99 22.94
+    ## 519         597 2.99 5.990000  8.99 11.98
+    ## 520         599 4.99 4.990000  4.99  4.99
+
+### Exercise 7.2
+
+Modify the above query to only keep the customer\_ids that have more
+then 5 payments
+
+``` r
+dbGetQuery(con,"
+ SELECT customer_id, COUNT(*) AS count,
+        MIN(amount) as min,
+        AVG(amount) AS avg,
+        MAX(amount) AS max,
+        SUM(amount) AS sum
+ FROM payment
+ GROUP BY customer_id
+ HAVING count  >   5
+")
+```
+
+    ##    customer_id count  min      avg  max   sum
+    ## 1           19     6 0.99 4.490000 9.99 26.94
+    ## 2           53     6 0.99 4.490000 9.99 26.94
+    ## 3          109     7 0.99 3.990000 7.99 27.93
+    ## 4          161     6 0.99 2.990000 5.99 17.94
+    ## 5          197     8 0.99 2.615000 3.99 20.92
+    ## 6          207     6 0.99 2.990000 6.99 17.94
+    ## 7          239     6 2.99 5.656667 7.99 33.94
+    ## 8          245     6 0.99 4.823333 8.99 28.94
+    ## 9          251     6 1.99 3.323333 4.99 19.94
+    ## 10         269     6 0.99 3.156667 6.99 18.94
+    ## 11         274     6 2.99 4.156667 5.99 24.94
+    ## 12         371     6 0.99 4.323333 6.99 25.94
+    ## 13         506     7 0.99 4.132857 8.99 28.93
+    ## 14         596     6 0.99 3.823333 6.99 22.94
 
 Cleanup Run the following chunk to disconnect from the connection.
 
