@@ -79,14 +79,15 @@ https://www.w3schools.com/sql/
 Retrive the actor ID, first name and last name for all actors using the actor table. Sort by last name and then by first name.
 
 ```{r ex1}
-ans <- DbgetQuery <- SELECT
-FROM
-ORDER by
+dbGetQuery(con, " 
+SELECT actor_id, first_name, last_name
+FROM actor
+ORDER by last_name, first_name")
 ```
 
 
 
-Exercise 2
+## Exercise 2
 Retrive the actor ID, first name, and last name for actors whose last name equals ‘WILLIAMS’ or ‘DAVIS’.
 
 SELECT 
