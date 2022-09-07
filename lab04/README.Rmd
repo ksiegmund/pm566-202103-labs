@@ -2,8 +2,10 @@
 title: "lab 4"
 author: "ks"
 date: "9/17/2021"
+leafletmap: true
 output: github_document
 always_allow_html: true
+preserve_yaml: true
 ---
 
 ```{r setup, include=FALSE}
