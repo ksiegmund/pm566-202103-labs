@@ -214,8 +214,8 @@ temp.pal
     ##     }
     ##     pf(rescaled)
     ## }
-    ## <bytecode: 0x7fb05146d548>
-    ## <environment: 0x7fb05146fe78>
+    ## <bytecode: 0x7fc552b039e0>
+    ## <environment: 0x7fc552b02400>
     ## attr(,"colorType")
     ## [1] "numeric"
     ## attr(,"colorArgs")
@@ -239,18 +239,62 @@ tempmap <- leaflet(met_avg2) %>%
           title='Temperature, C', opacity=1)
 
 #tempmap
-
-## save html to png
-saveWidget(tempmap, "leaflet_map.html", selfcontained = FALSE)
-webshot("leaflet_map.html", file = "leaflet_map.png",
-        cliprect = "viewport")
 ```
 
     ## Warning in is.null(x) || is.na(x): 'length(x) = 4 > 1' in coercion to
     ## 'logical(1)'
 
-![](README_files/figure-gfm/leaflet-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
-#Describe trend in RH across the US
+sessionInfo()
 ```
+
+    ## R version 4.2.0 (2022-04-22)
+    ## Platform: x86_64-apple-darwin17.0 (64-bit)
+    ## Running under: macOS Big Sur/Monterey 10.16
+    ## 
+    ## Matrix products: default
+    ## BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
+    ## LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
+    ## 
+    ## locale:
+    ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+    ## 
+    ## attached base packages:
+    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
+    ## 
+    ## other attached packages:
+    ##  [1] webshot_0.5.3     htmlwidgets_1.5.4 leaflet_2.1.1     forcats_0.5.1    
+    ##  [5] stringr_1.4.0     dplyr_1.0.9       purrr_0.3.4       readr_2.1.2      
+    ##  [9] tidyr_1.2.0       tibble_3.1.8      ggplot2_3.3.6     tidyverse_1.3.1  
+    ## [13] data.table_1.14.2
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##  [1] fs_1.5.2                lubridate_1.8.0         RColorBrewer_1.1-3     
+    ##  [4] httr_1.4.3              tools_4.2.0             backports_1.4.1        
+    ##  [7] utf8_1.2.2              R6_2.5.1                rpart_4.1.16           
+    ## [10] Hmisc_4.7-0             DBI_1.1.3               colorspace_2.0-3       
+    ## [13] nnet_7.3-17             withr_2.5.0             processx_3.6.1         
+    ## [16] tidyselect_1.1.2        gridExtra_2.3           compiler_4.2.0         
+    ## [19] cli_3.3.0               rvest_1.0.2             htmlTable_2.4.0        
+    ## [22] xml2_1.3.3              labeling_0.4.2          scales_1.2.0           
+    ## [25] checkmate_2.1.0         callr_3.7.0             digest_0.6.29          
+    ## [28] foreign_0.8-82          rmarkdown_2.14          base64enc_0.1-3        
+    ## [31] jpeg_0.1-9              pkgconfig_2.0.3         htmltools_0.5.2        
+    ## [34] dbplyr_2.2.1            fastmap_1.1.0           highr_0.9              
+    ## [37] rlang_1.0.4             readxl_1.4.0            rstudioapi_0.13        
+    ## [40] farver_2.1.0            generics_0.1.3          jsonlite_1.8.0         
+    ## [43] crosstalk_1.2.0         magrittr_2.0.3          Formula_1.2-4          
+    ## [46] interp_1.1-2            Matrix_1.4-1            Rcpp_1.0.8.3           
+    ## [49] munsell_0.5.0           fansi_1.0.3             lifecycle_1.0.1        
+    ## [52] stringi_1.7.8           yaml_2.3.5              grid_4.2.0             
+    ## [55] crayon_1.5.1            deldir_1.0-6            lattice_0.20-45        
+    ## [58] haven_2.5.0             splines_4.2.0           hms_1.1.1              
+    ## [61] ps_1.7.1                knitr_1.39              pillar_1.8.0           
+    ## [64] reprex_2.0.1            glue_1.6.2              evaluate_0.15          
+    ## [67] leaflet.providers_1.9.0 latticeExtra_0.6-30     modelr_0.1.8           
+    ## [70] png_0.1-7               vctrs_0.4.1             tzdb_0.3.0             
+    ## [73] cellranger_1.1.0        gtable_0.3.0            assertthat_0.2.1       
+    ## [76] xfun_0.31               broom_1.0.0             survival_3.3-1         
+    ## [79] cluster_2.1.3           ellipsis_0.3.2
