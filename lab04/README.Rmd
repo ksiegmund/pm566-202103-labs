@@ -2,7 +2,6 @@
 title: "lab 4"
 author: "ks"
 date: "9/17/2021"
-leafletmap: true
 output: github_document
 always_allow_html: true
 preserve_yaml: true
@@ -10,6 +9,7 @@ preserve_yaml: true
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
 ## Lab week 4
@@ -18,6 +18,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(data.table)
 library(tidyverse)
 library(leaflet)
+library(htmlwidgets)
+library(webshot)
 ```
 
 ### 1. Read in the data
@@ -142,7 +144,13 @@ tempmap <- leaflet(met_avg2) %>%
   addLegend('bottomleft', pal=temp.pal, values=met_avg2$temp,
           title='Temperature, C', opacity=1)
 
-tempmap
+#tempmap
+
+## save html to png
+saveWidget(tempmap, "leaflet_map.html", selfcontained = FALSE)
+webshot("leaflet_map.html", file = "leaflet_map.png",
+        cliprect = "viewport")
+
 #Describe trend in RH across the US
 
 ```
