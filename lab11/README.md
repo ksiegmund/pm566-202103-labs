@@ -8,7 +8,7 @@ editor_options:
 always_allow_html: true
 ---
 
-**Read report** [**here**](https://htmlpreview.github.io/?https://github.com/ksiegmund/pm566-202103-labs/blob/main/lab11/11-lab.html)
+**Read report** [**here**](https://rawcdn.githack.com/ksiegmund/pm566-202103-labs/d0b72920fb5950da68ceaf5b638cd057d2b3f55b/lab11/11-lab.html)
 
 Grab lab file using command line: 
 
