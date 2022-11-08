@@ -8,7 +8,7 @@ editor_options:
 always_allow_html: true
 ---
 
-**Read report** [**here**](https://cdn.statically.io/gh/ksiegmund/pm566-202103-labs/main/lab11/11-lab.html)
+**Read report** [**here**](https://htmlpreview.github.io/?https://github.com/ksiegmund/pm566-202103-labs/blob/main/lab11/11-lab.html)
 
 Grab lab file using command line: 
 
